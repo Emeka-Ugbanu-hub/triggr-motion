@@ -15,8 +15,14 @@ function finishWillChange(el: HTMLElement) {
   el.style.willChange = "auto"
 }
 
+function validDuration(value: unknown, fallback = 300): number {
+  const n = Number(value)
+  return Number.isFinite(n) && n > 0 ? n : fallback
+}
+
 function effectiveDuration(duration: number): number {
-  return prefersReducedMotion() ? duration / 2 : duration
+  const d = validDuration(duration, 300)
+  return prefersReducedMotion() ? d / 2 : d
 }
 
 function cancelElementAnimations(el: HTMLElement) {

@@ -22,6 +22,11 @@ export const EASE_IN_OUT = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 export const SPRING = 'cubic-bezier(0.34, 1.56, 0.64, 1)'
 export const SMOOTH = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
 
+function validDuration(value: unknown, fallback = 300): number {
+  const n = Number(value)
+  return Number.isFinite(n) && n > 0 ? n : fallback
+}
+
 const fadeIn: Keyframe[] = [
   { opacity: 0, transform: 'translateY(4px)' },
   { opacity: 1, transform: 'translateY(0)' },
@@ -965,7 +970,7 @@ function animateHighlight(
   let remaining = lineWraps.length
   const stagger = 70
   const maxDelay = (lineWraps.length - 1) * stagger
-  const drawDuration = Math.max(260, duration)
+  const drawDuration = Math.max(260, validDuration(duration, 600))
   const holdDuration = 140
   const totalDuration = drawDuration + maxDelay + holdDuration
   let cleaned = false
@@ -1552,7 +1557,8 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
     const current = currentRun.source === 'change' ? (watchedCurrent as string) : (value as string) ?? el.textContent ?? ''
     const text = String(current)
     const reduced = prefersReducedMotion()
-    const motionDuration = reduced ? duration / 2 : duration
+    const safeDuration = validDuration(duration, 300)
+    const motionDuration = reduced ? safeDuration / 2 : safeDuration
     const effectivePrev = currentRun.source === 'change' ? capturedPrevRef.current : undefined
 
     runFallbackRef.current = setTimeout(() => {

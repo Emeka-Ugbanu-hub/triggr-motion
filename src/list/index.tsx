@@ -6,6 +6,11 @@ import { usePositionTracker } from "./usePositionTracker"
 
 const warned = new Set<string>()
 
+function validDuration(value: unknown, fallback = 300): number {
+  const n = Number(value)
+  return Number.isFinite(n) && n > 0 ? n : fallback
+}
+
 function resolveDef(name: ListAnimationPreset, type: "enter" | "exit", custom?: AnimateListProps["customAnimation"]): AnimationDefinition {
   if (type === "enter" && custom?.enter) return custom.enter
   if (type === "exit" && custom?.exit) return custom.exit
@@ -289,8 +294,8 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
       runTimerRef.current = null
     }
     const resolvedDuration = reducedRef.current
-      ? duration / 2
-      : Number(def.options?.duration ?? duration)
+      ? validDuration(duration, 300) / 2
+      : validDuration(def.options?.duration ?? duration, 300)
     nodes.forEach((el, index) => {
       cancelElementAnimations(el)
       runAnimation(el, def, {
@@ -319,7 +324,7 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
     const sourceConfig = source ? triggerConfigs.find(tc => tc.trigger === source) : undefined
     const anim = sourceConfig?.animation ?? animation
     const def = resolveDef(anim, "enter", customAnimation)
-    const dur = reducedRef.current ? duration / 2 : duration
+    const dur = reducedRef.current ? validDuration(duration, 300) / 2 : validDuration(duration, 300)
     runAnimation(el, def, {
       duration: dur,
       easing: def.options?.easing ?? easing,
