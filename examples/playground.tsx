@@ -2827,7 +2827,7 @@ const styles = `
   --bg-sidebar: #0f0f0f;
   --bg-topbar: #0a0a0a;
   --border: #262626;
-  --border-subtle: #1a1a1a;
+  --border-subtle: #0d0d0d;
   --text: #f5f5f5;
   --text-secondary: #a3a3a3;
   --text-tertiary: #737373;
@@ -3070,6 +3070,7 @@ const styles = `
 [data-theme="dark"] .sidebar-trigger.active { color: var(--text) !important; }
 [data-theme="dark"] .sidebar-trigger-count { background: rgba(255,255,255,0.06) !important; color: var(--text-tertiary) !important; }
 [data-theme="dark"] .sidebar-trigger.active .sidebar-trigger-count { background: rgba(255,255,255,0.08) !important; color: var(--text-secondary) !important; }
+[data-theme="dark"] .sidebar { border-right-color: #0a0a0a !important; }
 
 /* Controls */
 [data-theme="dark"] .controls-title { color: var(--text-tertiary) !important; }
