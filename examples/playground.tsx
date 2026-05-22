@@ -4346,20 +4346,25 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
 .list-row:last-child { border-bottom: none; }
 .list-feature-card {
   min-height: 132px;
-  padding: 18px;
+  padding: 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.list-feature-card:hover {
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow-sm);
 }
 .list-feature-card span {
   align-self: flex-start;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(17,17,17,0.06);
+  background: var(--bg-sidebar);
   color: var(--text-secondary);
   font: 600 11px/1 var(--mono);
 }
@@ -4384,12 +4389,16 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   padding: 14px 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
   text-align: left;
+  transition: border-color 0.15s var(--ease);
+}
+.list-notification-row:hover {
+  border-color: var(--border-subtle);
 }
 .list-dashboard-row > span:last-child {
   color: var(--text-secondary);
@@ -4731,20 +4740,20 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
 /* ── Block Demo Card ────────────────────── */
 .block-demo-card {
   width: clamp(280px, 50vw, 400px);
-  padding: 28px 32px;
+  padding: 32px 36px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  background: #fff;
+  background: var(--bg-elevated);
   text-align: center;
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 12px;
+  gap: 14px;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.3s var(--ease);
+  transition: box-shadow 0.3s var(--ease), transform 0.3s var(--ease), border-color 0.3s var(--ease);
 }
-.block-demo-card:hover { box-shadow: var(--shadow); }
-.block-card-icon { color: var(--text-tertiary); }
+.block-demo-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--border); }
+.block-card-icon { color: var(--text-tertiary); margin-bottom: 4px; }
 .block-demo-card h3 {
   margin: 0;
   font-size: clamp(20px, 2.5vw, 28px);
@@ -4757,18 +4766,24 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   max-width: 300px;
   color: var(--text-secondary);
   font-size: 14px;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 .block-demo-card button {
-  margin-top: 4px;
+  margin-top: 6px;
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--bg-elevated);
   font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s var(--ease);
 }
-.block-demo-card button:hover { background: #2a2a2a; border-color: #2a2a2a; }
-.card-basic { background: #fff5d9; }
-.card-pro { background: #e4f1ff; }
+.block-demo-card button:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.card-basic { background: #fff8e6; }
+.card-pro { background: #e8f4ff; }
 .card-features { background: #e8f9ee; }
 .card-pricing { background: #ffe8ea; }
 .card-faq { background: #f0f0ff; }
