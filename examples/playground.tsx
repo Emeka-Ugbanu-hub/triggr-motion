@@ -2534,6 +2534,10 @@ export default function Playground() {
   const [secondaryTrigger, setSecondaryTrigger] = useState<SecondaryTrigger>(initialState.secondaryTrigger)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [dark, setDark] = useState(initialState.dark)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? "dark" : "light"
+  }, [dark])
   const runtimeOptions = useMemo<RuntimeOptions>(() => ({
     threshold,
     stagger,
@@ -2609,7 +2613,7 @@ export default function Playground() {
   const moduleEntries = useMemo(() => Object.keys(MODULE_META) as ModuleId[], [])
 
   return (
-    <div data-theme={dark ? "dark" : "light"}>
+    <div>
       <style>{styles}</style>
       <header className="topbar">
         <div className="topbar-inner">
@@ -2640,7 +2644,7 @@ export default function Playground() {
             <button type="button" onClick={() => selectModule("docs")}>Docs</button>
             <a href="https://github.com/Emeka-Ugbanu-hub/Trigr" target="_blank" rel="noopener noreferrer">GitHub</a>
             <button className="theme-toggle" onClick={() => setDark(!dark)} aria-label="Toggle theme">
-              {dark ? <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> : <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>}
+              {dark ? <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> : <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>}
             </button>
           </nav>
         </div>
@@ -3229,7 +3233,7 @@ html, body {
 
 .theme-toggle {
   display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  width: 42px; height: 42px; border-radius: var(--radius-sm);
   transition: all 0.2s var(--ease);
   color: var(--text-secondary);
   padding: 0;
