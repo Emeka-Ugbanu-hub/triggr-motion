@@ -232,6 +232,7 @@ type SavedPlaygroundState = {
   listSpeed: number
   propertyMode: PropertyMode
   secondaryTrigger: SecondaryTrigger
+  dark: boolean
 }
 
 const PLAYGROUND_STATE_KEY = "trigr.playground.state"
@@ -246,6 +247,7 @@ const DEFAULT_PLAYGROUND_STATE: SavedPlaygroundState = {
   listSpeed: 50,
   propertyMode: "none",
   secondaryTrigger: "none",
+  dark: false,
 }
 
 function clampNumber(value: unknown, fallback: number, min: number, max: number) {
@@ -276,7 +278,8 @@ function getSavedPlaygroundState(): SavedPlaygroundState {
       ? saved.secondaryTrigger
       : DEFAULT_PLAYGROUND_STATE.secondaryTrigger
 
-    return { module, trigger, preset, duration, easing, threshold, stagger, listSpeed, propertyMode, secondaryTrigger }
+    const dark = typeof saved.dark === "boolean" ? saved.dark : DEFAULT_PLAYGROUND_STATE.dark
+    return { module, trigger, preset, duration, easing, threshold, stagger, listSpeed, propertyMode, secondaryTrigger, dark }
   } catch {
     return DEFAULT_PLAYGROUND_STATE
   }
@@ -2504,7 +2507,7 @@ export default function Playground() {
   const [propertyMode, setPropertyMode] = useState<PropertyMode>(initialState.propertyMode)
   const [secondaryTrigger, setSecondaryTrigger] = useState<SecondaryTrigger>(initialState.secondaryTrigger)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [dark, setDark] = useState(() => typeof window !== "undefined" && (window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false))
+  const [dark, setDark] = useState(initialState.dark)
   const runtimeOptions = useMemo<RuntimeOptions>(() => ({
     threshold,
     stagger,
@@ -2556,8 +2559,9 @@ export default function Playground() {
       listSpeed,
       propertyMode,
       secondaryTrigger,
+      dark,
     }))
-  }, [module, trigger, preset, duration, easing, threshold, stagger, listSpeed, propertyMode, secondaryTrigger])
+  }, [module, trigger, preset, duration, easing, threshold, stagger, listSpeed, propertyMode, secondaryTrigger, dark])
 
   function selectModule(m: ModuleId, t?: Trigger) {
     setModule(m)
@@ -2806,7 +2810,12 @@ const styles = `
 [data-theme="dark"] .docs-hero,
 [data-theme="dark"] .docs-module-card,
 [data-theme="dark"] .docs-practice-grid article,
-[data-theme="dark"] .capability-panel { background: var(--bg-elevated); }
+[data-theme="dark"] .capability-panel,
+[data-theme="dark"] .docs-api-grid article,
+[data-theme="dark"] .docs-trigger-grid article,
+[data-theme="dark"] .docs-principle-grid article,
+[data-theme="dark"] .docs-preset-group,
+[data-theme="dark"] .docs-animation-module { background: var(--bg-elevated); }
 
 [data-theme="dark"] .select-option { color: var(--text); }
 [data-theme="dark"] .select-option:hover { background: var(--bg-sidebar); }
@@ -2816,14 +2825,29 @@ const styles = `
 [data-theme="dark"] .select-menu.open .select-trigger { border-color: var(--text-tertiary); box-shadow: 0 0 0 2px rgba(232,232,237,0.08); }
 
 [data-theme="dark"] .doc-code { background: var(--code-bg); }
-[data-theme="dark"] .docs-api-grid article,
-[data-theme="dark"] .docs-trigger-grid article { background: var(--bg-elevated); }
 
 [data-theme="dark"] .control-slider { background: var(--border); }
 [data-theme="dark"] .control-slider::-webkit-slider-thumb { background: var(--text); }
 
 [data-theme="dark"] .sidebar-trigger:hover { background: var(--bg-elevated); }
 [data-theme="dark"] .sidebar-trigger.active { background: var(--bg-elevated); }
+
+[data-theme="dark"] .preview-body { background: var(--bg-elevated); }
+[data-theme="dark"] .preview-toolbar { background: var(--bg-sidebar); border-color: var(--border-subtle); }
+[data-theme="dark"] .code-wrap { background: var(--code-bg); }
+[data-theme="dark"] .code-block { background: #1a1a1c; }
+[data-theme="dark"] .demo-stage { background: var(--bg-elevated); }
+[data-theme="dark"] .real-demo { background: var(--bg-elevated); }
+[data-theme="dark"] .search-field { background: var(--bg-elevated); }
+[data-theme="dark"] .toast-demo { background: var(--bg-elevated); }
+[data-theme="dark"] .card-basic { background: #2a2520; }
+[data-theme="dark"] .card-pricing { background: #2a2020; }
+[data-theme="dark"] .card-faq { background: #20202a; }
+[data-theme="dark"] .list-card { background: var(--bg-elevated); }
+[data-theme="dark"] .grid-card { background: var(--bg-elevated); }
+[data-theme="dark"] .reorder-card { background: var(--bg-elevated); }
+[data-theme="dark"] .ghost { background: var(--bg-elevated); border-color: var(--border); }
+[data-theme="dark"] .nav-links-demo { background: var(--bg-elevated); }
   --radius-sm: 6px;
   --radius: 11px;
   --radius-lg: 12px;
@@ -2836,7 +2860,7 @@ const styles = `
   --preview-stage-height: clamp(420px, calc(100dvh - 210px), 560px);
 }
 
-body {
+html, body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -3073,7 +3097,7 @@ body {
 
 
 /* ── Main ───────────────────────────────── */
-.main { margin-left: var(--sidebar-width); flex: 1; min-width: 0; padding: 28px 30px 70px; }
+.main { margin-left: var(--sidebar-width); flex: 1; min-width: 0; padding: 28px 30px 70px; background: var(--bg); }
 .main-header { margin: 0 auto 22px; max-width: 1300px; }
 .main-header h1 { margin: 0; font-size: clamp(42px, 4.4vw, 58px); font-weight: 700; letter-spacing: -0.05em; line-height: 1.05; }
 .badge {
