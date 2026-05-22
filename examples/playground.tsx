@@ -2504,7 +2504,7 @@ export default function Playground() {
   const [propertyMode, setPropertyMode] = useState<PropertyMode>(initialState.propertyMode)
   const [secondaryTrigger, setSecondaryTrigger] = useState<SecondaryTrigger>(initialState.secondaryTrigger)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [dark, setDark] = useState(() => typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false)
+  const [dark, setDark] = useState(() => typeof window !== "undefined" && (window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false))
   const runtimeOptions = useMemo<RuntimeOptions>(() => ({
     threshold,
     stagger,
