@@ -2975,6 +2975,15 @@ const styles = `
 
 /* List demos dark mode */
 [data-theme="dark"] .list-dashboard-row,
+[data-theme="dark"] .list-feature-card,
+[data-theme="dark"] .list-notification-row,
+[data-theme="dark"] .list-tag-pill,
+[data-theme="dark"] .list-nav-row,
+[data-theme="dark"] .list-flip-card,
+[data-theme="dark"] .list-bounce-item,
+[data-theme="dark"] .list-pop-row,
+[data-theme="dark"] .list-menu-button { background: var(--bg-elevated) !important; }
+[data-theme="dark"] .list-dashboard-row,
 [data-theme="dark"] .list-dashboard-row strong,
 [data-theme="dark"] .list-dashboard-row p,
 [data-theme="dark"] .list-feature-card,
@@ -2984,10 +2993,32 @@ const styles = `
 [data-theme="dark"] .list-notification-row,
 [data-theme="dark"] .list-notification-row strong,
 [data-theme="dark"] .list-notification-row p,
-[data-theme="dark"] .list-tag-pill { color: var(--text) !important; }
+[data-theme="dark"] .list-tag-pill,
+[data-theme="dark"] .list-nav-row,
+[data-theme="dark"] .list-nav-row strong,
+[data-theme="dark"] .list-flip-card,
+[data-theme="dark"] .list-flip-card strong,
+[data-theme="dark"] .list-bounce-item,
+[data-theme="dark"] .list-bounce-item strong,
+[data-theme="dark"] .list-pop-row,
+[data-theme="dark"] .list-pop-row strong,
+[data-theme="dark"] .list-menu-button { color: var(--text) !important; }
 [data-theme="dark"] .list-dashboard-row p,
 [data-theme="dark"] .list-feature-card p,
-[data-theme="dark"] .list-notification-row p { color: var(--text-secondary) !important; }
+[data-theme="dark"] .list-notification-row p,
+[data-theme="dark"] .list-flip-card p,
+[data-theme="dark"] .list-pop-row .pop-badge { color: var(--text-secondary) !important; }
+[data-theme="dark"] .list-feature-card.tone-green,
+[data-theme="dark"] .list-feature-card.tone-blue,
+[data-theme="dark"] .list-feature-card.tone-amber,
+[data-theme="dark"] .list-feature-card.tone-pink,
+[data-theme="dark"] .list-feature-card.tone-violet { background: var(--bg-elevated) !important; }
+[data-theme="dark"] .pop-badge { background: rgba(255,255,255,0.08) !important; color: var(--text-secondary) !important; }
+[data-theme="dark"] .list-parallax-demo { background: var(--bg-elevated) !important; }
+[data-theme="dark"] .list-parallax-card { color: var(--text) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .list-parallax-card span { color: var(--text-tertiary) !important; }
+[data-theme="dark"] .list-parallax-card p { color: var(--text-secondary) !important; }
+[data-theme="dark"] .list-parallax-card button { background: var(--text) !important; color: var(--bg-elevated) !important; border-color: var(--text) !important; }
 [data-theme="dark"] .list-remove-btn { color: var(--text-tertiary) !important; }
 [data-theme="dark"] .toolbar-count { color: var(--text-secondary) !important; }
 
@@ -4682,7 +4713,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   min-height: 42px;
   padding: 0 18px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   font-weight: 650;
   letter-spacing: -0.02em;
@@ -4693,7 +4724,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   gap: 12px;
   padding: 12px 16px;
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   text-align: left;
   transition: box-shadow 0.15s ease;
@@ -4723,7 +4754,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   gap: 12px;
   padding: 16px;
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   text-align: left;
   transform-style: preserve-3d;
@@ -4756,7 +4787,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   gap: 14px;
   padding: 14px 16px;
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   text-align: left;
 }
@@ -4778,7 +4809,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   gap: 12px;
   padding: 14px 16px;
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   text-align: left;
 }
@@ -4811,7 +4842,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
 }
 .list-parallax-demo {
   position: relative;
-  background: #fff;
+  background: var(--bg-elevated);
 }
 .list-parallax-stack {
   position: relative;
@@ -4877,7 +4908,7 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
   justify-items: start;
   gap: 12px;
   padding: 0 18px;
-  background: #fff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   text-align: left;
