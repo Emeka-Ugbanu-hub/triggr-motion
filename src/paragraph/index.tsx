@@ -1207,10 +1207,13 @@ function reserveStableParagraphSize(el: HTMLElement, prevText: string, nextText:
 const customAnimations: Record<string, (...args: any[]) => Animation | undefined> = {
   morph: animateMorph,
   fadeSwap: animateFadeSwap,
-  slideReplace: animateSlideReplace,
+  slideReplace: (el: HTMLElement, prev: string | undefined, text: string | undefined, duration: number, onEnd?: () => void) =>
+    animateSlideReplace(el, prev, text, 1, duration, onEnd),
   crossFade: animateCrossFade,
-  fadeMask: animateFadeMask,
-  highlight: animateHighlight,
+  fadeMask: (el: HTMLElement, _prev: string | undefined, _text: string | undefined, duration: number, onEnd?: () => void) =>
+    animateFadeMask(el, duration, onEnd),
+  highlight: (el: HTMLElement, _prev: string | undefined, text: string | undefined, duration: number, onEnd?: () => void, highlightColor?: string) =>
+    animateHighlight(el, text ?? '', duration, highlightColor, onEnd),
   diffAnimate: animateDiff,
   heightAuto: animateHeightAuto,
 }

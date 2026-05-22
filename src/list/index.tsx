@@ -469,6 +469,7 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
     }
 
     prevChildrenRef.current = children
+    snapshot()
   }, [diff, children, activeAnimation, exitAnimation, duration, reorderDuration, stagger, exitStagger, reorderMode, reorderEasing, properties])
 
   useEffect(() => {
@@ -493,10 +494,10 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
         })
         ghostAnimatedRef.current.delete(key)
         ghostTimersRef.current.delete(key)
-      }, duration + idx * exitStagger)
+      }, validDuration(duration, 300) + idx * exitStagger)
       ghostTimersRef.current.set(key, timer)
 
-      const el = root.querySelector(`[data-trigr-key="${key}"]`) as HTMLElement | null
+      const el = root.querySelector(`[data-trigr-key="${key}"]:not([data-trigr-ghost])`) as HTMLElement | null
       if (el) {
         el.getAnimations().forEach((a) => a.cancel())
         runAnimation(el, def, {
@@ -710,6 +711,7 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
       createElement("div", {
         key: `ghost-${g.key}`,
         "data-trigr-key": g.key,
+        "data-trigr-ghost": "true",
         style: {
           position: "absolute",
           top: g.top,

@@ -3025,7 +3025,16 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
 
-      const spans = appendCharSpans(ref.current, text, (span) => {
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
+      const el = ref.current
+      const runId = beginAnimationRun(el)
+      const spans = appendCharSpans(el, text, (span) => {
         span.style.willChange = "transform, opacity"
       })
       const stagger = Math.max(18, Math.min(45, motionDuration * 0.08))
@@ -3040,10 +3049,16 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
           ],
           { duration: motionDuration, delay: i * stagger, fill: "forwards", easing: SPRING },
         )
+        anim.oncancel = () => {
+          if (!isActiveAnimationRun(el, runId)) return
+          spans.forEach((item) => { item.style.willChange = "auto" })
+          el.textContent = text
+        }
         if (i === last) {
           anim.onfinish = () => {
+            if (!isActiveAnimationRun(el, runId)) return
             spans.forEach((item) => { item.style.willChange = "auto" })
-            ref.current!.textContent = text
+            el.textContent = text
             onAnimationEnd?.()
           }
         }
@@ -3056,10 +3071,20 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
 
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
+      const el = ref.current
+      const runId = beginAnimationRun(el)
+
       const glitched = [1, 2, 3, 4, 5].map((i) => `${i}px ${i}px`).join(", ")
       const clean = [0, 0, 0, 0, 0].map(() => "0px 0px").join(", ")
 
-      const anim = ref.current.animate(
+      const anim = el.animate(
         [
           { textShadow: glitched, transform: "translate(-6px, -6px) skewX(-2deg)" },
           { textShadow: clean, transform: "translate(0, 0) skewX(0deg)" },
@@ -3068,16 +3093,35 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       )
 
       animRef.current = anim
-      anim.onfinish = () => {
+      const cleanup = () => {
+        if (!isActiveAnimationRun(el, runId)) return
+        el.style.textShadow = ""
+        el.style.transform = ""
         animRef.current = null
+      }
+      anim.onfinish = () => {
+        cleanup()
         onAnimationEnd?.()
       }
+      anim.oncancel = cleanup
 
       return
     }
 
     if (animation === "textReveal") {
-      const curtainColor = getComputedStyle(ref.current).backgroundColor
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
+      const el = ref.current
+      const runId = beginAnimationRun(el)
+      const previousPosition = el.style.position
+      const previousOverflow = el.style.overflow
+
+      const curtainColor = getComputedStyle(el).backgroundColor
       const curtain = document.createElement("div")
       curtain.style.position = "absolute"
       curtain.style.top = "0"
@@ -3088,25 +3132,29 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       curtain.style.transform = "translateX(-100%)"
       curtain.style.pointerEvents = "none"
 
-      ref.current.style.position = "relative"
-      ref.current.style.overflow = "hidden"
-      ref.current.appendChild(curtain)
+      el.style.position = "relative"
+      el.style.overflow = "hidden"
+      el.appendChild(curtain)
 
       const anim = curtain.animate(
         [{ transform: "translateX(-100%)" }, { transform: "translateX(100%)" }],
         { duration: motionDuration, easing: EASE_IN_OUT, fill: "forwards" },
       )
 
+      const cleanup = () => {
+        if (!isActiveAnimationRun(el, runId)) return
+        curtain.remove()
+        el.style.position = previousPosition
+        el.style.overflow = previousOverflow
+        animRef.current = null
+      }
+
       animRef.current = anim
       anim.onfinish = () => {
-        animRef.current = null
-        curtain.remove()
-        if (ref.current) {
-          ref.current.style.position = ""
-          ref.current.style.overflow = ""
-        }
+        cleanup()
         onAnimationEnd?.()
       }
+      anim.oncancel = cleanup
 
       return
     }
@@ -3145,7 +3193,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
 
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
       const el = ref.current
+      const runId = beginAnimationRun(el)
       const spans = appendCharSpans(el, text)
       const order = spans.map((_, i) => i).sort(() => Math.random() - 0.5)
       const staggerGap = motionDuration / spans.length
@@ -3161,9 +3217,14 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
           [{ opacity: 0 }, { opacity: 1 }],
           { duration: motionDuration, delay: order[i] * staggerGap, fill: "forwards" },
         )
+        anim.oncancel = () => {
+          if (!isActiveAnimationRun(el, runId)) return
+          el.textContent = text
+        }
         anim.onfinish = () => {
           remaining -= 1
           if (remaining === 0) {
+            if (!isActiveAnimationRun(el, runId)) return
             el.textContent = text
             onAnimationEnd?.()
           }
@@ -3254,7 +3315,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
 
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
       const el = ref.current
+      const runId = beginAnimationRun(el)
       const spans = appendCharSpans(el, text)
       let remaining = spans.length
 
@@ -3280,9 +3349,14 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
             easing: EASE_IN,
           },
         )
+        anim.oncancel = () => {
+          if (!isActiveAnimationRun(el, runId)) return
+          el.textContent = text
+        }
         anim.onfinish = () => {
           remaining -= 1
           if (remaining === 0) {
+            if (!isActiveAnimationRun(el, runId)) return
             el.textContent = text
             onAnimationEnd?.()
           }
@@ -3296,7 +3370,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
 
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
       const el = ref.current
+      const runId = beginAnimationRun(el)
       const spans = appendCharSpans(el, text)
       let remaining = spans.length
 
@@ -3326,9 +3408,14 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
             easing: EASE_IN_OUT,
           },
         )
+        anim.oncancel = () => {
+          if (!isActiveAnimationRun(el, runId)) return
+          el.textContent = text
+        }
         anim.onfinish = () => {
           remaining -= 1
           if (remaining === 0) {
+            if (!isActiveAnimationRun(el, runId)) return
             el.textContent = text
             onAnimationEnd?.()
           }
@@ -3339,9 +3426,18 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
     }
 
     if (animation === "popUp") {
-      const computedColor = getComputedStyle(ref.current).color
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
+      const el = ref.current
+      const runId = beginAnimationRun(el)
+      const computedColor = getComputedStyle(el).color
       const shadows = Array.from({ length: 9 }, (_, i) => `0 ${i + 1}px 0 ${computedColor}`).join(", ")
-      const anim = ref.current.animate(
+      const anim = el.animate(
         [
           { transform: "translateY(0)", textShadow: "none" },
           { transform: "translateY(-14px)", textShadow: `${shadows}, 0 14px 16px rgba(0,0,0,0.2)`, offset: 0.55 },
@@ -3349,13 +3445,29 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
         ],
         { duration: motionDuration, easing: SPRING },
       )
+      const cleanup = () => {
+        if (!isActiveAnimationRun(el, runId)) return
+        el.style.textShadow = ""
+        el.style.willChange = ""
+        animRef.current = null
+      }
       animRef.current = anim
-      anim.onfinish = () => { animRef.current = null; onAnimationEnd?.() }
+      anim.onfinish = () => { cleanup(); onAnimationEnd?.() }
+      anim.oncancel = cleanup
       return
     }
 
     if (animation === "jello") {
-      const anim = ref.current.animate(
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
+      const el = ref.current
+      const runId = beginAnimationRun(el)
+      const anim = el.animate(
         [
           { transform: "scale(1, 1)" },
           { transform: "scale(1.08, 0.94)", offset: 0.167 },
@@ -3367,33 +3479,50 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
         ],
         { duration: motionDuration, easing: SPRING },
       )
+      const cleanup = () => {
+        if (!isActiveAnimationRun(el, runId)) return
+        el.style.willChange = ""
+        animRef.current = null
+      }
       animRef.current = anim
-      anim.onfinish = () => { animRef.current = null; onAnimationEnd?.() }
+      anim.onfinish = () => { cleanup(); onAnimationEnd?.() }
+      anim.oncancel = cleanup
       return
     }
 
     if (animation === "scramble") {
       const text = String(current)
       if (!text) return
+
+      if (prefersReducedMotion()) {
+        const el = ref.current!
+        const anim = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: "forwards" })
+        anim.onfinish = () => onAnimationEnd?.()
+        return
+      }
+
       const chars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`¡™£¢∞§¶•ªº–≠åß∂ƒ©˙∆˚¬…æ≈ç√∫˜µ≤≥÷/░▒▓<>"
+      const el = ref.current
+      const runId = beginAnimationRun(el)
 
       const finalChars: string[] = []
-      const spans = appendCharSpans(ref.current, text, (span, char) => {
+      const spans = appendCharSpans(el, text, (span, char) => {
         finalChars.push(char)
-        span.style.willChange = "contents, opacity"
+        span.style.willChange = "transform, opacity"
       })
       const stepMs = 42
       const totalMs = Math.max(280, Math.min(motionDuration + spans.length * 20, stepMs * Math.max(7, spans.length)))
       const startTime = performance.now()
 
       function tick(now: number) {
+        if (!isActiveAnimationRun(el, runId)) return
         const elapsed = now - startTime
         if (elapsed >= totalMs) {
           spans.forEach((span, i) => {
             span.textContent = finalChars[i]
             span.style.willChange = "auto"
           })
-          ref.current!.textContent = text
+          el.textContent = text
           rafRef.current = null
           onAnimationEnd?.()
           return

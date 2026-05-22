@@ -310,6 +310,7 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
   const runTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const prevValueRef = useRef<string | number | undefined>(value)
   const hoverApplied = useRef(false)
+  const hoverAnimRef = useRef<string | null>(null)
   const runningRef = useRef(false)
   const queueRef = useRef<AnimationTrigger[]>([])
   const runIdRef = useRef(0)
@@ -348,6 +349,8 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
   const activeConfig = triggerConfigs.find(tc => tc.trigger === activeTrigger)
   const animation = activeConfig?.animation ?? baseAnimation
   const cat = presetCategory[animation] ?? "oneshot"
+  const animationRef = useRef(animation)
+  animationRef.current = animation
   const scrollConfig = triggerConfigs.find(tc => tc.trigger === "scroll")
   const scrollThreshold = scrollConfig?.threshold ?? threshold
 
@@ -412,7 +415,7 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
     // Save and clear hoverState inline styles so the animation starts from a clean position
     const savedHoverStyles: Record<string, string> = {}
     if (hoverApplied.current) {
-      const hoverStyleDef = HOVER_STATE_CSS[name]
+      const hoverStyleDef = HOVER_STATE_CSS[hoverAnimRef.current ?? name]
       if (hoverStyleDef) {
         for (const key in hoverStyleDef) {
           savedHoverStyles[key] = (el.style as any)[key]
@@ -847,6 +850,7 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
     const el = ref.current
     if (!el) return
     const hoverAnimation = getAnimationFor("hover")
+    hoverAnimRef.current = hoverAnimation
     const c = presetCategory[hoverAnimation] ?? "oneshot"
 
     if (c === "hoverState") {
@@ -911,7 +915,7 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
       if (runTimerRef.current !== null) clearTimeout(runTimerRef.current)
       queueRef.current = []
       if (hoverApplied.current && ref.current) {
-        const styles = HOVER_STATE_CSS[animation]
+        const styles = HOVER_STATE_CSS[animationRef.current]
         if (styles) clearStyles(ref.current, styles)
       }
     }
