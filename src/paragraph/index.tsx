@@ -238,8 +238,16 @@ export const presets: Record<string, { out: Keyframe[]; in: Keyframe[] }> = {
     in: [],
   },
   flash: {
-    out: [],
-    in: [],
+    out: [
+      { filter: 'brightness(1)', opacity: 1 },
+      { filter: 'brightness(1.8)', opacity: 1, offset: 0.5 },
+      { filter: 'brightness(1)', opacity: 1 },
+    ],
+    in: [
+      { filter: 'brightness(1)', opacity: 1 },
+      { filter: 'brightness(1.8)', opacity: 1, offset: 0.5 },
+      { filter: 'brightness(1)', opacity: 1 },
+    ],
   },
   pushLeft: {
     out: [
