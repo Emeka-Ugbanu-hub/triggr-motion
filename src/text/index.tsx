@@ -2652,6 +2652,9 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
   scrollAnimation,
   highlightColor: highlightColorProp,
   properties,
+  exitAnimation,
+  show,
+  unmountOnExit = true,
   duration = 300,
   easing = SPRING,
   delay = 0,
@@ -2679,6 +2682,11 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
   const runningRef = useRef(false)
   const queueRef = useRef<TriggerSource[]>([])
   const [currentRun, setCurrentRun] = useState<QueuedRun | null>(null)
+  const [phase, setPhase] = useState<"entered" | "exiting" | "exited">(
+    show !== false ? "entered" : "exited"
+  )
+  const exitAnimRef = useRef<Animation | null>(null)
+  const exitKeyRef = useRef(0)
   const watchedValue = useMemo(() => value ?? textFromNode(children), [children, value])
   const { changed, prev, current: watchedCurrent } = useValueChange(watchedValue)
   const capturedPrevRef = useRef(prev)
@@ -2792,6 +2800,74 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
     requestRun("mount")
   }, [hasTrigger, requestRun])
 
+  useEffect(() => {
+    if (show === undefined) return
+
+    if (show) {
+      exitAnimRef.current?.cancel()
+      exitAnimRef.current = null
+      setPhase("entered")
+      return
+    }
+
+    const key = ++exitKeyRef.current
+    const exitPreset = exitAnimation ?? ("fadeOut" as AnimationPreset)
+
+    if (!exitAnimation) {
+      setPhase("exited")
+      return
+    }
+
+    const el = ref.current
+    if (!el) {
+      setPhase("exited")
+      return
+    }
+
+    animRef.current?.cancel()
+
+    const motionDuration = validDuration(duration, 300)
+    const def = presets[exitPreset]
+    if (!def) {
+      setPhase("exited")
+      return
+    }
+
+    const onExitEnd = () => {
+      if (exitKeyRef.current === key) {
+        setPhase("exited")
+        exitAnimRef.current = null
+      }
+    }
+
+    setPhase("exiting")
+
+    const exitFrames = def.out.length ? def.out : def.in.length ? def.in : [{ opacity: 0 }]
+    el.style.willChange = "transform, opacity"
+    applyInitialState(el, exitFrames)
+    const kf = prefersReducedMotion() ? reducedKeyframes(exitFrames) : exitFrames
+    exitAnimRef.current = el.animate(kf, {
+      duration: motionDuration,
+      easing,
+      fill: "forwards",
+    })
+    exitAnimRef.current.addEventListener("finish", () => {
+      applyFinalState(el, exitFrames)
+      el.style.willChange = "auto"
+      onExitEnd()
+    })
+    exitAnimRef.current.addEventListener("cancel", () => {
+      el.style.willChange = "auto"
+    })
+
+    return () => {
+      if (exitKeyRef.current === key) {
+        exitAnimRef.current?.cancel()
+        exitAnimRef.current = null
+      }
+    }
+  }, [show, exitAnimation, duration, easing])
+
   const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
     onClick?.(event)
     if (hasTrigger("click")) requestRun("click")
@@ -2813,6 +2889,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       if (runFallbackRef.current !== null) clearTimeout(runFallbackRef.current)
       animRef.current?.cancel()
       propertyAnimRef.current?.cancel()
+      exitAnimRef.current?.cancel()
     }
   }, [])
 
@@ -3809,6 +3886,10 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       onAnimationEnd?.()
     }
   }, [activeTrigger, animation, currentRun, delay, duration, easing, finishRun, properties, value, watchedCurrent])
+
+  if (phase === "exited" && unmountOnExit !== false) {
+    return null
+  }
 
   return createElement(
     as,

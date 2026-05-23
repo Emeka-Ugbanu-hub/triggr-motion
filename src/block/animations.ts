@@ -40,6 +40,8 @@ export const presetCategory: Record<string, PresetCategory> = {
   tabPanelOut: "oneshot",
   successToast: "oneshot",
   checkboxCheck: "oneshot",
+  dialogOut: "oneshot", drawerOutLeft: "oneshot", drawerOutRight: "oneshot", drawerOutTop: "oneshot", drawerOutBottom: "oneshot",
+  menuOut: "oneshot", toastOutRight: "oneshot", toastOutUp: "oneshot", collapseWidth: "oneshot", dismissOut: "oneshot", errorOut: "oneshot", successOut: "oneshot",
 }
 
 export const presets: Record<string, AnimationDefinition> = {
@@ -456,6 +458,94 @@ export const presets: Record<string, AnimationDefinition> = {
     out: [
       { transform: 'scale(1)', opacity: 1 },
       { transform: 'scale(0)', opacity: 0 },
+    ],
+  },
+  dialogOut: {
+    in: [],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.95)', opacity: 0 },
+    ],
+  },
+  drawerOutLeft: {
+    in: [],
+    out: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(-100%)', opacity: 0 },
+    ],
+  },
+  drawerOutRight: {
+    in: [],
+    out: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(100%)', opacity: 0 },
+    ],
+  },
+  drawerOutTop: {
+    in: [],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(-100%)', opacity: 0 },
+    ],
+  },
+  drawerOutBottom: {
+    in: [],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(100%)', opacity: 0 },
+    ],
+  },
+  menuOut: {
+    in: [],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.95)', opacity: 0 },
+    ],
+  },
+  toastOutRight: {
+    in: [],
+    out: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(24px)', opacity: 0 },
+    ],
+  },
+  toastOutUp: {
+    in: [],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(-16px)', opacity: 0 },
+    ],
+  },
+  collapseWidth: {
+    in: [],
+    out: [
+      { maxWidth: '100%', opacity: 1, overflow: 'hidden' },
+      { maxWidth: '0px', opacity: 0, overflow: 'hidden' },
+    ],
+  },
+  dismissOut: {
+    in: [],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(8px) scale(0.96)', opacity: 0 },
+    ],
+  },
+  errorOut: {
+    in: [],
+    out: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(-4px)', offset: 0.2 },
+      { transform: 'translateX(4px)', offset: 0.4 },
+      { transform: 'translateX(-2px)', offset: 0.6 },
+      { transform: 'translateX(0)', opacity: 0, offset: 0.8 },
+    ],
+  },
+  successOut: {
+    in: [],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(1.1)', opacity: 0.3, offset: 0.4 },
+      { transform: 'scale(0.9)', opacity: 0 },
     ],
   },
 }

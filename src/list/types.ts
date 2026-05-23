@@ -40,6 +40,7 @@ export type ListAnimationPreset =
   | "popIn" | "bounceIn" | "expandIn" | "flipIn" | "glideIn"
   | "fadeOut" | "slideOut" | "slideOutLeft" | "slideOutRight"
   | "popOut" | "bounceOut" | "collapseOut" | "flipOut" | "glideOut"
+  | "itemSlideOutLeft" | "itemSlideOutRight" | "itemScaleOut" | "itemPopOut" | "itemBlurOut" | "itemDismissOut" | "rowCollapseOut" | "tagRemove" | "cardRemove"
   | "marquee"
   | "staggerBlurIn" | "feedAppend" | "filterIn" | "emptyToList"
   | "selectionPulse" | "insertItem" | "emptyStateToList"

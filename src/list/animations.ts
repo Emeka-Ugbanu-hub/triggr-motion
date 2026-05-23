@@ -235,6 +235,70 @@ const extended: Record<string, AnimationDefinition> = {
     ],
     options: { duration: 500, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' },
   },
+  itemSlideOutLeft: {
+    keyframes: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(-20px)', opacity: 0 },
+    ],
+    options: { duration: 220, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  itemSlideOutRight: {
+    keyframes: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(20px)', opacity: 0 },
+    ],
+    options: { duration: 220, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  itemScaleOut: {
+    keyframes: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+    options: { duration: 200, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  itemPopOut: {
+    keyframes: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(1.03)', opacity: 0.3, offset: 0.3 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+    options: { duration: 220, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  itemBlurOut: {
+    keyframes: [
+      { filter: 'blur(0)', opacity: 1 },
+      { filter: 'blur(6px)', opacity: 0 },
+    ],
+    options: { duration: 250, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  itemDismissOut: {
+    keyframes: [
+      { transform: 'translateX(0)', opacity: 1 },
+      { transform: 'translateX(30px)', opacity: 0 },
+    ],
+    options: { duration: 250, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  rowCollapseOut: {
+    keyframes: [
+      { maxHeight: '200px', opacity: 1, marginBottom: '8px' },
+      { maxHeight: '0px', opacity: 0, marginBottom: '0px', padding: '0 16px' },
+    ],
+    options: { duration: 280, easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)', fill: 'forwards' },
+  },
+  tagRemove: {
+    keyframes: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.8)', opacity: 0 },
+    ],
+    options: { duration: 180, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
+  cardRemove: {
+    keyframes: [
+      { transform: 'translateY(0) scale(1)', opacity: 1 },
+      { transform: 'translateY(-8px) scale(0.96)', opacity: 0 },
+    ],
+    options: { duration: 240, easing: 'cubic-bezier(0.4, 0.0, 1, 1)', fill: 'forwards' },
+  },
 }
 
 // Merge enterPresets + extended into a single lookup, typed as the union

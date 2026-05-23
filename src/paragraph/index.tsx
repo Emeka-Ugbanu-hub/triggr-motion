@@ -308,6 +308,98 @@ export const presets: Record<string, { out: Keyframe[]; in: Keyframe[] }> = {
       { transform: 'translateX(0)' },
     ],
   },
+  paragraphFadeOut: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(0)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(0)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  slideOutUp: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(-16px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(-16px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  slideOutDown: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(16px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(16px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  slideOutLeft: {
+    out: [
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: 'translateX(-18px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateX(-18px)' },
+      { opacity: 1, transform: 'translateX(0)' },
+    ],
+  },
+  slideOutRight: {
+    out: [
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: 'translateX(18px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateX(18px)' },
+      { opacity: 1, transform: 'translateX(0)' },
+    ],
+  },
+  collapseHeight: {
+    out: [
+      { maxHeight: '1000px', opacity: 1, overflow: 'hidden' },
+      { maxHeight: '0px', opacity: 0, overflow: 'hidden' },
+    ],
+    in: [
+      { maxHeight: '0px', opacity: 0, overflow: 'hidden' },
+      { maxHeight: '1000px', opacity: 1, overflow: 'hidden' },
+    ],
+  },
+  wordFadeOut: {
+    out: [{ opacity: 1 }, { opacity: 0 }],
+    in: [{ opacity: 0 }, { opacity: 1 }],
+  },
+  wordSlideOut: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(-10px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(-10px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  lineFadeOut: {
+    out: [{ opacity: 1 }, { opacity: 0 }],
+    in: [{ opacity: 0 }, { opacity: 1 }],
+  },
+  lineSlideOut: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(-12px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(-12px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  fadeMaskOut: {
+    out: [{ opacity: 1 }, { opacity: 0 }],
+    in: [{ opacity: 0 }, { opacity: 1 }],
+  },
 }
 
 // ============================================================
@@ -1446,6 +1538,9 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
   animation: baseAnimation,
   scrollAnimation,
   properties,
+  exitAnimation,
+  show,
+  unmountOnExit = true,
   highlightColor: highlightColorProp,
   duration = 300,
   easing = SPRING,
@@ -1476,9 +1571,14 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
   const queueRef = useRef<AnimationTrigger[]>([])
   const runIdRef = useRef(0)
   const scrollTriggeredRef = useRef(false)
+  const exitAnimRef = useRef<Animation | null>(null)
+  const exitKeyRef = useRef(0)
 
   const [playCount, setPlayCount] = useState(0)
   const [currentRun, setCurrentRun] = useState<{ id: number; source: AnimationTrigger } | null>(null)
+  const [phase, setPhase] = useState<"entered" | "exiting" | "exited">(
+    show !== false ? "entered" : "exited"
+  )
   const { changed, prev, current: watchedCurrent } = useValueChange(value)
   const capturedPrevRef = useRef(prev)
   if (changed) capturedPrevRef.current = prev
@@ -1577,6 +1677,81 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
     if (!hasTrigger('mount')) return
     requestRun('mount')
   }, [hasTrigger, requestRun])
+
+  useEffect(() => {
+    if (show === undefined) return
+
+    if (show) {
+      exitAnimRef.current?.cancel()
+      exitAnimRef.current = null
+      setPhase("entered")
+      return
+    }
+
+    const key = ++exitKeyRef.current
+
+    if (!exitAnimation) {
+      setPhase("exited")
+      return
+    }
+
+    const el = ref.current
+    if (!el) {
+      setPhase("exited")
+      return
+    }
+
+    animRef.current?.cancel()
+
+    const motionDuration = validDuration(duration, 300)
+    const def = presets[exitAnimation]
+    if (!def) {
+      setPhase("exited")
+      return
+    }
+
+    const onExitEnd = () => {
+      if (exitKeyRef.current === key) {
+        setPhase("exited")
+        exitAnimRef.current = null
+      }
+    }
+
+    setPhase("exiting")
+
+    const exitFrames = def.out.length ? def.out : def.in.length ? def.in : [{ opacity: 0 }]
+    el.style.willChange = "transform, opacity"
+    const first = exitFrames[0]
+    if (first) {
+      if ((first as any).opacity !== undefined) el.style.opacity = String((first as any).opacity)
+      if ((first as any).transform !== undefined) el.style.transform = String((first as any).transform)
+    }
+    const kf = prefersReducedMotion() ? exitFrames.map(({ opacity }: any) => ({ opacity: opacity ?? 1 })) : exitFrames
+    exitAnimRef.current = el.animate(kf, {
+      duration: motionDuration,
+      easing,
+      fill: "forwards",
+    })
+    exitAnimRef.current.addEventListener("finish", () => {
+      const last = exitFrames[exitFrames.length - 1]
+      if (last) {
+        if ((last as any).opacity !== undefined) el.style.opacity = String((last as any).opacity)
+        if ((last as any).transform !== undefined) el.style.transform = String((last as any).transform)
+      }
+      el.style.willChange = "auto"
+      onExitEnd()
+    })
+    exitAnimRef.current.addEventListener("cancel", () => {
+      el.style.willChange = "auto"
+    })
+
+    return () => {
+      if (exitKeyRef.current === key) {
+        exitAnimRef.current?.cancel()
+        exitAnimRef.current = null
+      }
+    }
+  }, [show, exitAnimation, duration, easing])
 
   // click / hover
   const handleClick = useCallback(
@@ -1692,11 +1867,16 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
   useEffect(() => () => {
     animRef.current?.cancel()
     propertyAnimRef.current?.cancel()
+    exitAnimRef.current?.cancel()
     cleanupRef.current?.()
     if (timerRef.current !== null) clearTimeout(timerRef.current)
     if (runFallbackRef.current !== null) clearTimeout(runFallbackRef.current)
     queueRef.current = []
   }, [])
+
+  if (phase === "exited" && unmountOnExit !== false) {
+    return null
+  }
 
   return createElement(
     as,

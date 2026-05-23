@@ -40,6 +40,17 @@ export type ParagraphPreset =
   | "diffAnimate"
   | "scrollWordReveal"
   | "errorMessageIn"
+  | "paragraphFadeOut"
+  | "slideOutUp"
+  | "slideOutDown"
+  | "slideOutLeft"
+  | "slideOutRight"
+  | "collapseHeight"
+  | "wordFadeOut"
+  | "wordSlideOut"
+  | "lineFadeOut"
+  | "lineSlideOut"
+  | "fadeMaskOut"
 
 export type AnimationTrigger = "change" | "scroll" | "hover" | "click" | "manual" | "mount"
 export type AnimationTriggerInput = AnimationTrigger | readonly [AnimationTrigger, AnimationTrigger] | readonly AnimationTrigger[]
@@ -63,6 +74,9 @@ export interface AnimateParagraphProps {
   animation: ParagraphPreset
   scrollAnimation?: ParagraphPreset
   properties?: AnimationProperties
+  exitAnimation?: ParagraphPreset
+  show?: boolean
+  unmountOnExit?: boolean
   highlightColor?: string
   duration?: number
   easing?: string

@@ -304,4 +304,123 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
       { filter: 'brightness(1)', opacity: 1 },
     ],
   },
+
+  fadeOutUp: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(-8px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(-8px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  fadeOutDown: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(8px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(8px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+
+  slideOutUp: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(-12px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(-12px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  slideOutDown: {
+    out: [
+      { opacity: 1, transform: 'translateY(0)' },
+      { opacity: 0, transform: 'translateY(12px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateY(12px)' },
+      { opacity: 1, transform: 'translateY(0)' },
+    ],
+  },
+  slideOutLeft: {
+    out: [
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: 'translateX(-14px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateX(-14px)' },
+      { opacity: 1, transform: 'translateX(0)' },
+    ],
+  },
+  slideOutRight: {
+    out: [
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: 'translateX(14px)' },
+    ],
+    in: [
+      { opacity: 0, transform: 'translateX(14px)' },
+      { opacity: 1, transform: 'translateX(0)' },
+    ],
+  },
+
+  scaleOut: {
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+    in: [
+      { transform: 'scale(0.9)', opacity: 0 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+  },
+  popOut: {
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(1.05)', opacity: 0.3, offset: 0.4 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+    in: [
+      { transform: 'scale(0.9)', opacity: 0 },
+      { transform: 'scale(1.05)', opacity: 1, offset: 0.6 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+  },
+
+  blurOut: {
+    out: [
+      { filter: 'blur(0)', opacity: 1 },
+      { filter: 'blur(4px)', opacity: 0 },
+    ],
+    in: [
+      { filter: 'blur(4px)', opacity: 0 },
+      { filter: 'blur(0)', opacity: 1 },
+    ],
+  },
+  clipOut: {
+    out: [
+      { clipPath: 'inset(0 0 0 0)', opacity: 1 },
+      { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+    ],
+    in: [
+      { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+      { clipPath: 'inset(0 0 0 0)', opacity: 1 },
+    ],
+  },
+
+  strikeOut: {
+    out: [],
+    in: [],
+  },
+  typeOut: {
+    out: [],
+    in: [],
+  },
+  scrambleOut: {
+    out: [],
+    in: [],
+  },
 }

@@ -58,6 +58,46 @@ const ANIMATION_DEFAULTS: Record<string, { duration: number; easing: string }> =
   fadeMask: { duration: 500, easing: SMOOTH_EASE },
   streamFade: { duration: 400, easing: SMOOTH_EASE },
   heightAuto: { duration: 350, easing: SMOOTH_EASE },
+  fadeOutUp: { duration: 200, easing: EASE_IN },
+  fadeOutDown: { duration: 200, easing: EASE_IN },
+  slideOutUp: { duration: 220, easing: EASE_IN },
+  slideOutDown: { duration: 220, easing: EASE_IN },
+  slideOutLeft: { duration: 220, easing: EASE_IN },
+  slideOutRight: { duration: 220, easing: EASE_IN },
+  scaleOut: { duration: 200, easing: EASE_IN },
+  blurOut: { duration: 250, easing: EASE_IN },
+  clipOut: { duration: 250, easing: EASE_IN },
+  strikeOut: { duration: 300, easing: EASE_IN },
+  typeOut: { duration: 400, easing: EASE_IN },
+  scrambleOut: { duration: 400, easing: EASE_IN },
+  paragraphFadeOut: { duration: 200, easing: EASE_IN },
+  collapseHeight: { duration: 300, easing: EASE_IN },
+  wordFadeOut: { duration: 200, easing: EASE_IN },
+  wordSlideOut: { duration: 220, easing: EASE_IN },
+  lineFadeOut: { duration: 200, easing: EASE_IN },
+  lineSlideOut: { duration: 220, easing: EASE_IN },
+  fadeMaskOut: { duration: 300, easing: EASE_IN },
+  itemSlideOutLeft: { duration: 220, easing: EASE_IN },
+  itemSlideOutRight: { duration: 220, easing: EASE_IN },
+  itemScaleOut: { duration: 200, easing: EASE_IN },
+  itemPopOut: { duration: 220, easing: EASE_IN },
+  itemBlurOut: { duration: 250, easing: EASE_IN },
+  itemDismissOut: { duration: 250, easing: EASE_IN },
+  rowCollapseOut: { duration: 280, easing: EASE_IN },
+  tagRemove: { duration: 180, easing: EASE_IN },
+  cardRemove: { duration: 240, easing: EASE_IN },
+  dialogOut: { duration: 200, easing: EASE_IN },
+  drawerOutLeft: { duration: 250, easing: EASE_IN },
+  drawerOutRight: { duration: 250, easing: EASE_IN },
+  drawerOutTop: { duration: 250, easing: EASE_IN },
+  drawerOutBottom: { duration: 250, easing: EASE_IN },
+  menuOut: { duration: 150, easing: EASE_IN },
+  toastOutRight: { duration: 200, easing: EASE_IN },
+  toastOutUp: { duration: 200, easing: EASE_IN },
+  collapseWidth: { duration: 300, easing: EASE_IN },
+  dismissOut: { duration: 200, easing: EASE_IN },
+  errorOut: { duration: 300, easing: EASE_IN },
+  successOut: { duration: 250, easing: EASE_IN },
 }
 
 const EASINGS: [string, string][] = [
@@ -203,8 +243,8 @@ const LIST_PRESETS: ListAnimationPreset[] = [
   "selectionPulse", "insertItem", "emptyStateToList", "staggerBlurIn", "feedAppend", "filterIn", "emptyToList",
 ]
 
-const LIST_EXIT_PRESETS: ListAnimationPreset[] = ["fadeOut", "slideOut", "slideOutLeft", "slideOutRight", "popOut", "bounceOut", "collapseOut", "flipOut", "itemFadeOut", "itemSlideOut", "itemCollapseOut", "glideOut"]
-const LIST_EXIT_ONLY_PRESETS: ListAnimationPreset[] = ["fadeOut", "slideOut", "slideOutLeft", "slideOutRight", "popOut", "bounceOut", "collapseOut", "flipOut", "itemFadeOut", "itemSlideOut", "itemCollapseOut", "glideOut"]
+const LIST_EXIT_PRESETS: ListAnimationPreset[] = ["fadeOut", "slideOut", "slideOutLeft", "slideOutRight", "popOut", "bounceOut", "collapseOut", "flipOut", "itemFadeOut", "itemSlideOut", "itemCollapseOut", "glideOut", "itemSlideOutLeft", "itemSlideOutRight", "itemScaleOut", "itemPopOut", "itemBlurOut", "itemDismissOut", "rowCollapseOut", "tagRemove", "cardRemove"]
+const LIST_EXIT_ONLY_PRESETS: ListAnimationPreset[] = ["fadeOut", "slideOut", "slideOutLeft", "slideOutRight", "popOut", "bounceOut", "collapseOut", "flipOut", "itemFadeOut", "itemSlideOut", "itemCollapseOut", "glideOut", "itemSlideOutLeft", "itemSlideOutRight", "itemScaleOut", "itemPopOut", "itemBlurOut", "itemDismissOut", "rowCollapseOut", "tagRemove", "cardRemove"]
 const LIST_ENTER_PRESETS: ListAnimationPreset[] = ["fadeIn", "slideIn", "slideInLeft", "slideInRight", "popIn", "bounceIn", "expandIn", "flipIn", "staggerFadeIn", "staggerSlideUp", "staggerSlideLeft", "staggerZoomIn", "staggerPopIn", "stackIn", "wordCascade", "wordWave", "wordDrop", "wordFadeIn", "itemFadeIn", "itemSlideIn", "itemPopIn", "itemBounceIn", "glideIn", "staggerBlurIn", "feedAppend", "filterIn", "emptyToList", "selectionPulse", "insertItem", "emptyStateToList"]
 const LIST_REORDER_PRESETS: ListAnimationPreset[] = ["flip", "smooth", "spring", "none"]
 const LIST_MARQUEE_PRESETS: ListAnimationPreset[] = ["marquee", "marqueeReverse", "marqueeFade"]
@@ -267,14 +307,20 @@ const BLOCK_CLICK_PRESETS: BlockAnimationPreset[] = [
 ]
 
 const TEXT_EXIT_PRESETS: AnimationPreset[] = [
-  "fadeOut", "shrinkOut", "slideUp", "slideDown", "fadeAway",
-  "blur", "fadeSwap", "morph", "decoder", "scramble",
+  "fadeOut", "fadeOutUp", "fadeOutDown", "shrinkOut",
+  "slideOutUp", "slideOutDown", "slideOutLeft", "slideOutRight",
+  "scaleOut", "popOut", "blurOut", "clipOut",
+  "strikeOut", "typeOut", "scrambleOut",
+  "fadeSwap", "morph", "decoder", "blur", "fadeAway", "slideUp", "slideDown",
 ]
 
 const PARAGRAPH_EXIT_PRESETS: ParagraphPreset[] = [
-  "fadeOut", "popOut", "collapseOut", "zoomOut",
-  "slideUp", "slideDown", "slideLeft", "slideRight",
-  "fadeSwap", "slideReplace", "crossFade",
+  "fadeOut", "paragraphFadeOut", "popOut", "collapseOut", "zoomOut",
+  "slideOutUp", "slideOutDown", "slideOutLeft", "slideOutRight",
+  "collapseHeight",
+  "wordFadeOut", "wordSlideOut", "lineFadeOut", "lineSlideOut",
+  "fadeMaskOut",
+  "fadeSwap", "slideReplace", "crossFade", "slideUp", "slideDown",
 ]
 
 function exitPresetsFor(module: ModuleId): string[] {
@@ -283,6 +329,19 @@ function exitPresetsFor(module: ModuleId): string[] {
   if (module === "list") return LIST_EXIT_PRESETS
   if (module === "block") return BLOCK_EXIT_PRESETS
   return []
+}
+
+function exitCategoryMatch(preset: string, category: string): boolean {
+  const p = preset.toLowerCase()
+  if (category === "fade") return p.includes("fade")
+  if (category === "slide") return p.includes("slide") || p.includes("drawer")
+  if (category === "scale") return p.includes("scale") || p.includes("pop")
+  if (category === "collapse") return p.includes("collapse") || p.includes("height") || p.includes("width")
+  if (category === "blur") return p.includes("blur")
+  if (category === "modal") return p.includes("modal") || p.includes("dialog")
+  if (category === "toast") return p.includes("toast")
+  if (category === "item") return p.includes("item") || p.includes("tag") || p.includes("card") || p.includes("row")
+  return true
 }
 
 const PRESETS_BY_MODULE_TRIGGER: Record<Exclude<ModuleId, "docs">, string[] | Partial<Record<Trigger, string[]>>> = {
@@ -431,10 +490,16 @@ const MODULE_META: Record<ModuleId, { title: string; desc: string; color: string
 }
 
 const EXIT_PRESETS_FOR_DEMO: BlockAnimationPreset[] = [
-  "fadeOut", "slideUp", "slideDown", "slideLeft", "slideRight",
-  "scaleOut", "popOut", "zoomOut", "flipX", "flipY",
-  "collapseOut", "blurOut", "fadeSlideUp", "glideOut",
-  "bounceOut", "modalOut", "popoverOut", "toastOut", "tabPanelOut",
+  "fadeOut", "scaleOut", "popOut", "rotateOut", "bounceOut",
+  "glideOut", "collapseOut", "blurOut", "zoomOut",
+  "modalOut", "dialogOut",
+  "drawerOutLeft", "drawerOutRight", "drawerOutTop", "drawerOutBottom",
+  "slideUp", "slideDown", "slideLeft", "slideRight",
+  "popoverOut", "menuOut",
+  "toastOut", "toastOutRight", "toastOutUp",
+  "collapseWidth", "expandHeight",
+  "dismissOut", "errorOut", "successOut",
+  "tabPanelOut", "fadeSlideUp",
 ]
 
 const BLOCK_EXIT_PRESETS: BlockAnimationPreset[] = EXIT_PRESETS_FOR_DEMO
@@ -3624,6 +3689,7 @@ export default function Playground() {
   const [stagger, setStagger] = useState(initialState.stagger)
   const [listSpeed, setListSpeed] = useState(initialState.listSpeed)
   const [exitPreset, setExitPreset] = useState(initialState.exitPreset)
+  const [exitCategory, setExitCategory] = useState("all")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [dark, setDark] = useState(initialState.dark)
 
@@ -3641,6 +3707,11 @@ export default function Playground() {
   const activeSectionKey = `${module}:${trigger}:${preset}`
   const isListParallaxPreset = module === "list" && LIST_PARALLAX_PRESETS.includes(preset as ListAnimationPreset)
   const isListMarqueePreset = module === "list" && LIST_MARQUEE_PRESETS.includes(preset as ListAnimationPreset)
+  const filteredExitOptions = useMemo(() => {
+    const all = exitPresetsFor(module)
+    if (exitCategory === "all") return all
+    return all.filter(p => exitCategoryMatch(p, exitCategory))
+  }, [module, exitCategory])
 
   const allTriggers = meta.triggers
   const exitTrigger = "exit" as Trigger
@@ -3788,10 +3859,25 @@ export default function Playground() {
                 <label className="control-label">Exit Animation</label>
                 <SelectMenu
                   value={exitPreset || "None"}
-                  options={["None", ...exitPresetsFor(module)]}
+                  options={["None", ...filteredExitOptions]}
                   onChange={(v) => setExitPreset(v === "None" ? "" : v)}
                 />
               </div>
+              {exitPresetsFor(module).length > 0 && (
+                <div className="control-group">
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+                    <button type="button" className={!exitCategory || exitCategory === "all" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("all")}>All</button>
+                    <button type="button" className={exitCategory === "fade" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("fade")}>Fade</button>
+                    <button type="button" className={exitCategory === "slide" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("slide")}>Slide</button>
+                    <button type="button" className={exitCategory === "scale" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("scale")}>Scale</button>
+                    <button type="button" className={exitCategory === "collapse" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("collapse")}>Collapse</button>
+                    <button type="button" className={exitCategory === "blur" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("blur")}>Blur</button>
+                    {module === "block" && <button type="button" className={exitCategory === "modal" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("modal")}>Modal</button>}
+                    {module === "block" && <button type="button" className={exitCategory === "toast" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("toast")}>Toast</button>}
+                    {module === "list" && <button type="button" className={exitCategory === "item" ? "control-chip active" : "control-chip"} onClick={() => setExitCategory("item")}>Item</button>}
+                  </div>
+                </div>
+              )}
               <div className="control-group">
                 <div className="control-label-row">
                   <label className="control-label">Duration</label>
@@ -6465,6 +6551,17 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
 }
 
 /* ── Composed Demos ──────────────────────── */
+.control-chip {
+  padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text-tertiary); font-size: 11px;
+  font-weight: 600; cursor: pointer; transition: all 0.15s var(--ease);
+  font-family: var(--font);
+}
+.control-chip:hover { background: var(--bg-elevated); color: var(--text); border-color: var(--text-tertiary); }
+.control-chip.active { background: var(--accent); color: var(--bg-elevated); border-color: var(--accent); }
+[data-theme="dark"] .control-chip { background: var(--bg); border-color: var(--border); color: var(--text-tertiary); }
+[data-theme="dark"] .control-chip:hover { background: var(--bg-elevated); color: var(--text); }
+[data-theme="dark"] .control-chip.active { background: var(--accent); color: var(--bg-elevated); border-color: var(--accent); }
 .demo-actions { display: flex; gap: 10px; margin-bottom: 16px; }
 .demo-nav button { font-family: var(--font); }
 .composed-demo { display: block; }

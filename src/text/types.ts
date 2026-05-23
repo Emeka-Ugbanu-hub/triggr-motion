@@ -56,6 +56,7 @@ export type AnimationPreset =
   | "textEffect"
   | "staggerText"
   | "underlineDraw" | "underlineSlide" | "copyConfirm" | "colorShift" | "activeTabText"
+  | "fadeOutUp" | "fadeOutDown" | "slideOutUp" | "slideOutDown" | "slideOutLeft" | "slideOutRight" | "scaleOut" | "blurOut" | "clipOut" | "strikeOut" | "typeOut" | "scrambleOut" | "popOut"
 
 export type AnimationTrigger = "change" | "scroll" | "hover" | "click" | "manual" | "mount"
 export type AnimationTriggerInput = AnimationTrigger | readonly [AnimationTrigger, AnimationTrigger] | readonly AnimationTrigger[]
@@ -79,6 +80,9 @@ export interface AnimateTextProps {
   animation: AnimationPreset
   scrollAnimation?: AnimationPreset
   properties?: AnimationProperties
+  exitAnimation?: AnimationPreset
+  show?: boolean
+  unmountOnExit?: boolean
   duration?: number
   easing?: string
   delay?: number
