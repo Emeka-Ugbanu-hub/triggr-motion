@@ -3873,22 +3873,23 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const hlColor = highlightColorProp ?? colorWithAlpha(getComputedStyle(hlEl).color, 0.55)
       const hlDuration = motionDuration
 
-      // Reset any prior highlight state so repeated triggers work
-      hlEl.style.background = ""
-      hlEl.style.backgroundSize = ""
-      hlEl.style.backgroundRepeat = ""
-      hlEl.style.backgroundPosition = ""
-
-      hlEl.style.background = `linear-gradient(120deg, ${hlColor} 50%, transparent 50%)`
-      hlEl.style.backgroundSize = "200% 100%"
-      hlEl.style.backgroundRepeat = "no-repeat"
-      hlEl.style.backgroundPosition = "100% 0"
-      hlEl.style.willChange = "transform, opacity"
-
+      // Start and end keyframes carry all background properties so the
+      // animation fully controls the element — no stale fill:forwards from
+      // a previous run can block the new sweep.
       const anim = hlEl.animate(
         [
-          { backgroundPosition: "100% 0" },
-          { backgroundPosition: "0% 0" },
+          {
+            backgroundImage: `linear-gradient(120deg, ${hlColor} 50%, transparent 50%)`,
+            backgroundSize: "200% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "100% 0",
+          },
+          {
+            backgroundImage: `linear-gradient(120deg, ${hlColor} 50%, transparent 50%)`,
+            backgroundSize: "200% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "0% 0",
+          },
         ],
         { duration: hlDuration, easing: SMOOTH, fill: "forwards", delay },
       )
@@ -3897,13 +3898,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       anim.onfinish = () => {
         if (!isActiveAnimationRun(hlEl, hlRunId)) return
         animRef.current = null
-        hlEl.style.backgroundPosition = "0% 0"
+        hlEl.style.backgroundImage = `linear-gradient(120deg, ${hlColor} 50%, transparent 50%)`
         hlEl.style.backgroundSize = "200% 100%"
+        hlEl.style.backgroundRepeat = "no-repeat"
+        hlEl.style.backgroundPosition = "0% 0"
         hlEl.style.willChange = "auto"
         onAnimationEnd?.()
       }
       anim.oncancel = () => {
-        hlEl.style.background = ""
+        hlEl.style.backgroundImage = ""
         hlEl.style.backgroundSize = ""
         hlEl.style.backgroundRepeat = ""
         hlEl.style.backgroundPosition = ""
