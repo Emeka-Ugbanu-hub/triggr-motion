@@ -14,7 +14,7 @@ export default defineConfig({
   external: ["react", "react-dom"],
   splitting: false,
   treeshake: true,
-  minify: false,
+  minify: true,
   outDir: "dist",
   outExtension: ({ format }) => format === "cjs" ? { js: ".cjs" } : { js: ".js" },
   exports: "named",
