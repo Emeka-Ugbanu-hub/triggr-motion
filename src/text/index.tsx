@@ -3012,7 +3012,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const el = ref.current
       const runId = beginAnimationRun(el)
       const spans = appendCharSpans(el, text)
-      const stagger = 40
+      const stagger = presetOptions?.stagger ?? 40
       const totalDuration = motionDuration + (spans.length - 1) * stagger + 50
 
       spans.forEach((span, i) => {
@@ -3045,15 +3045,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
         span.style.opacity = "0"
         span.style.filter = "blur(2px)"
       })
-      const stagger = 40
+      const stagger = presetOptions?.stagger ?? 40
       const totalDuration = motionDuration + (spans.length - 1) * stagger + 50
 
       spans.forEach((span, i) => {
         span.animate(
-          [
+          rebaseKeyframes([
             { opacity: 0, filter: "blur(2px)" },
             { opacity: 1, filter: "blur(0px)" },
-          ],
+          ], presetOptions),
           { duration: motionDuration, delay: (spans.length - 1 - i) * stagger, fill: "forwards", easing: SPRING },
         )
       })
@@ -3141,16 +3141,16 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const spans = appendCharSpans(el, text, (span) => {
         span.style.willChange = "transform, opacity"
       })
-      const stagger = Math.max(18, Math.min(45, motionDuration * 0.08))
+      const stagger = presetOptions?.stagger ?? Math.max(18, Math.min(45, motionDuration * 0.08))
       const last = spans.length > 0 ? spans.length - 1 : 0
 
       spans.forEach((span, i) => {
         const anim = span.animate(
-          [
+          rebaseKeyframes([
             { transform: "translateY(-24px)", opacity: 0 },
             { transform: "translateY(2px)", opacity: 1, offset: 0.78 },
             { transform: "translateY(0)" },
-          ],
+          ], presetOptions),
           { duration: motionDuration, delay: i * stagger, fill: "forwards", easing: SPRING },
         )
         anim.oncancel = () => {
@@ -3189,10 +3189,10 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const clean = [0, 0, 0, 0, 0].map(() => "0px 0px").join(", ")
 
       const anim = el.animate(
-        [
+        rebaseKeyframes([
           { textShadow: glitched, transform: "translate(-6px, -6px) skewX(-2deg)" },
           { textShadow: clean, transform: "translate(0, 0) skewX(0deg)" },
-        ],
+        ], presetOptions),
         { duration: motionDuration, easing: EASE_IN_OUT, fill: "forwards" },
       )
 
@@ -3318,7 +3318,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
 
       spans.forEach((span, i) => {
         const anim = span.animate(
-          [{ opacity: 0 }, { opacity: 1 }],
+          rebaseKeyframes([{ opacity: 0 }, { opacity: 1 }], presetOptions),
           { duration: motionDuration, delay: order[i] * staggerGap, fill: "forwards" },
         )
         anim.oncancel = () => {
@@ -3442,10 +3442,10 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
         const r = (Math.random() - 0.5) * 8
 
         const anim = span.animate(
-          [
+          rebaseKeyframes([
             { transform: `translate(${x}px, ${y}px) rotate(${r}deg)`, opacity: 0 },
             { transform: "translate(0, 0) rotate(0deg)", opacity: 1 },
-          ],
+          ], presetOptions),
           {
             duration: motionDuration * 0.8,
             delay: Math.random() * motionDuration * 0.3,
@@ -3542,11 +3542,11 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const computedColor = getComputedStyle(el).color
       const shadows = Array.from({ length: 9 }, (_, i) => `0 ${i + 1}px 0 ${computedColor}`).join(", ")
       const anim = el.animate(
-        [
+        rebaseKeyframes([
           { transform: "translateY(0)", textShadow: "none" },
           { transform: "translateY(-14px)", textShadow: `${shadows}, 0 14px 16px rgba(0,0,0,0.2)`, offset: 0.55 },
           { transform: "translateY(0)", textShadow: "none" },
-        ],
+        ], presetOptions),
         { duration: motionDuration, easing: SPRING },
       )
       const cleanup = () => {
@@ -3572,7 +3572,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const el = ref.current
       const runId = beginAnimationRun(el)
       const anim = el.animate(
-        [
+        rebaseKeyframes([
           { transform: "scale(1, 1)" },
           { transform: "scale(1.08, 0.94)", offset: 0.167 },
           { transform: "scale(0.96, 1.06)", offset: 0.333 },
@@ -3580,7 +3580,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
           { transform: "scale(0.98, 1.02)", offset: 0.667 },
           { transform: "scale(1.02, 0.99)", offset: 0.833 },
           { transform: "scale(1, 1)" },
-        ],
+        ], presetOptions),
         { duration: motionDuration, easing: SPRING },
       )
       const cleanup = () => {
@@ -3662,15 +3662,15 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       }
 
       const spans = appendCharSpans(ref.current, text)
-      const stagger = Math.max(45, Math.min(90, motionDuration * 0.08))
+      const stagger = presetOptions?.stagger ?? Math.max(45, Math.min(90, motionDuration * 0.08))
       const last = spans.length > 0 ? spans.length - 1 : 0
       spans.forEach((span, i) => {
         const anim = span.animate(
-          [
+          rebaseKeyframes([
             { transform: "translateY(0)", opacity: 1 },
             { transform: "translateY(-10px)", opacity: 1, offset: 0.5 },
             { transform: "translateY(0)", opacity: 1 },
-          ],
+          ], presetOptions),
           { duration: Math.max(520, motionDuration), delay: i * stagger, iterations: 1, easing: SMOOTH },
         )
         if (i === 0) animRef.current = anim
@@ -3763,7 +3763,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
       const inners = appendRollingCharSlots(ref.current, text)
-      const stagger = 40
+      const stagger = presetOptions?.stagger ?? 40
       inners.forEach((s, i) => {
         s.animate(
           [
@@ -3786,7 +3786,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const text = String(current)
       if (!text) return
       const inners = appendRollingCharSlots(ref.current, text)
-      const stagger = 30
+      const stagger = presetOptions?.stagger ?? 30
       inners.forEach((s, i) => {
         s.animate(
           [{ transform: "translateY(100%)", opacity: 0 }, { transform: "translateY(0)", opacity: 1 }],

@@ -320,21 +320,22 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
     const resolvedDuration = reducedRef.current
       ? validDuration(duration, 300) / 2
       : validDuration(def.options?.duration ?? duration, 300)
+    const effectiveStagger = presetOptions?.stagger ?? stagger
     nodes.forEach((el, index) => {
       cancelElementAnimations(el)
       runAnimation(el, def, {
         duration: resolvedDuration,
         easing: def.options?.easing ?? easing,
-        delay: index * stagger,
+        delay: index * effectiveStagger,
         fill: "forwards",
       }, presetOptions)
       runPropertyAnimation(el, properties, {
         duration: resolvedDuration,
         easing,
-        delay: index * stagger,
+        delay: index * effectiveStagger,
       })
     })
-    runTimerRef.current = setTimeout(finishRun, resolvedDuration + Math.max(0, nodes.length - 1) * stagger + 80)
+    runTimerRef.current = setTimeout(finishRun, resolvedDuration + Math.max(0, nodes.length - 1) * effectiveStagger + 80)
   }, [activeTrigger, animation, customAnimation, duration, easing, finishRun, properties, triggerConfigs, stagger])
 
   const hoveredKeyRef = useRef<string | number | null>(null)
@@ -467,13 +468,13 @@ const AnimateList = forwardRef<AnimateListHandle, AnimateListProps>(function Ani
           runAnimation(el, def, {
             duration: dur,
             easing: def.options?.easing ?? easing,
-            delay: i * stagger,
+            delay: i * (presetOptions?.stagger ?? stagger),
             fill: "forwards",
           }, presetOptions)
           runPropertyAnimation(el, properties, {
             duration: dur,
             easing,
-            delay: i * stagger,
+            delay: i * (presetOptions?.stagger ?? stagger),
           })
         }
         onItemEnter?.(key)
