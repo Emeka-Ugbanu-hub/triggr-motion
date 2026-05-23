@@ -53,6 +53,11 @@ const ANIMATION_DEFAULTS: Record<string, { duration: number; easing: string }> =
   tabPanelOut: { duration: 200, easing: EASE_IN },
   successToast: { duration: 400, easing: SPRING_EASE },
   checkboxCheck: { duration: 350, easing: SPRING_EASE },
+  fadeAway: { duration: 350, easing: SMOOTH_EASE },
+  liftReveal: { duration: 400, easing: SMOOTH_EASE },
+  fadeMask: { duration: 500, easing: SMOOTH_EASE },
+  streamFade: { duration: 400, easing: SMOOTH_EASE },
+  heightAuto: { duration: 350, easing: SMOOTH_EASE },
 }
 
 const EASINGS: [string, string][] = [
@@ -83,23 +88,24 @@ const TEXT_ALL_PRESETS: AnimationPreset[] = [
   "slideUp", "slideDown", "flip", "bounce",
   "popIn", "dropIn", "riseUp", "expandIn", "shrinkOut",
   "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
+  "fadeAway", "liftReveal",
 ]
 
 const TEXT_CHANGE_PRESETS: AnimationPreset[] = [
   "fadeSwap", "morph", "slideReplace", "typewriter", "decoder", "scramble",
   "odometer", "ticker", "strikeThrough",
   "highlight", "boldFlash", "blur",
-  "letterDrop", "glitch", "textReveal", "scatter", "splash",
-  "fadeIn", "slideUp", "slideDown", "flip", "bounce",
+  "slideUp", "slideDown", "flip", "bounce",
   "popIn", "dropIn", "riseUp", "expandIn",
-  "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
-  "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
+  "fadeIn", "underlineDraw", "underlineSlide", "copyConfirm", "colorShift", "activeTabText",
+  "fadeAway", "liftReveal",
 ]
 
 const TEXT_SCROLL_PRESETS: AnimationPreset[] = [
   "fadeIn", "letterDrop", "textReveal", "scatter", "splash",
   "slideUp", "slideDown", "flip", "bounce", "popIn", "dropIn", "riseUp", "expandIn",
   "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
+  "fadeAway", "liftReveal",
 ]
 
 const TEXT_INTERACTION_PRESETS: AnimationPreset[] = [
@@ -116,6 +122,7 @@ const TEXT_MOUNT_PRESETS: AnimationPreset[] = [
   "textRotate", "gooeyMorph", "randomLetterSwap",
   "slideUp", "slideDown", "flip", "bounce", "popIn", "dropIn", "riseUp", "expandIn",
   "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
+  "fadeAway", "liftReveal",
 ]
 
 const PARAGRAPH_ALL_PRESETS: ParagraphPreset[] = [
@@ -131,6 +138,7 @@ const PARAGRAPH_ALL_PRESETS: ParagraphPreset[] = [
   "zoomIn", "zoomOut",
   "pulse", "shake", "errorMessageIn",
   "pushLeft", "pushRight", "flipPage",
+  "fadeMask", "streamFade", "heightAuto",
 ]
 
 const PARAGRAPH_CHANGE_PRESETS: ParagraphPreset[] = [
@@ -141,6 +149,7 @@ const PARAGRAPH_CHANGE_PRESETS: ParagraphPreset[] = [
   "lineFadeIn", "lineSlideUp", "streamIn", "streamSlide",
   "slideUp", "slideDown", "slideLeft", "slideRight",
   "popIn", "expandIn", "zoomIn", "shake", "errorMessageIn",
+  "fadeMask", "streamFade", "heightAuto",
 ]
 
 const PARAGRAPH_SCROLL_PRESETS: ParagraphPreset[] = [
@@ -148,6 +157,7 @@ const PARAGRAPH_SCROLL_PRESETS: ParagraphPreset[] = [
   "lineFadeIn", "lineSlideUp", "streamIn", "streamSlide",
   "scrollWordReveal", "slideUp", "slideDown", "slideLeft", "slideRight",
   "popIn", "expandIn", "zoomIn", "highlight", "flash",
+  "fadeMask", "streamFade",
 ]
 
 const PARAGRAPH_INTERACTION_PRESETS: ParagraphPreset[] = [
@@ -161,6 +171,7 @@ const PARAGRAPH_MOUNT_PRESETS: ParagraphPreset[] = [
   "lineFadeIn", "lineSlideUp", "streamIn", "streamSlide",
   "slideUp", "slideDown", "slideLeft", "slideRight",
   "popIn", "expandIn", "zoomIn", "errorMessageIn", "highlight", "flash",
+  "fadeMask", "streamFade", "heightAuto",
 ]
 
 const LIST_PRESETS: ListAnimationPreset[] = [
@@ -223,7 +234,16 @@ const BLOCK_ENTRANCE_PRESETS: BlockAnimationPreset[] = [
   "modalIn", "popoverIn", "toastIn", "successCheckIn",
   "tabPanelIn", "successToast", "checkboxCheck",
 ]
-const BLOCK_CHANGE_PRESETS: BlockAnimationPreset[] = BLOCK_ONESHOT_PRESETS
+const BLOCK_CHANGE_PRESETS: BlockAnimationPreset[] = [
+  "fadeSwap", "slideUp", "slideDown", "slideLeft", "slideRight",
+  "scaleIn", "popIn", "rotateIn", "flipX", "flipY", "bounceIn",
+  "glideIn", "dropIn", "riseUp", "expandIn", "expandHeight", "fadeSlideUp",
+  "blurIn", "clipUp", "clipLeft", "zoomIn",
+  "springBounce", "springScale", "springSlideUp", "springSlideDown",
+  "morphRadius", "morphCircle",
+  "modalIn", "popoverIn", "toastIn", "successCheckIn",
+  "tabPanelIn", "successToast", "checkboxCheck",
+]
 const BLOCK_INTERACTION_PRESETS: BlockAnimationPreset[] = [
   "press", "shake", "wiggle", "jello", "flash", "heartBeat",
   "popIn", "bounceIn", ...BLOCK_HOVER_STATE_PRESETS, ...BLOCK_CURSOR_PRESETS, ...BLOCK_CONTINUOUS_PRESETS,
@@ -254,7 +274,7 @@ const PRESETS_BY_MODULE_TRIGGER: Record<Exclude<ModuleId, "docs">, string[] | Pa
     scroll: [...LIST_ENTER_PRESETS, ...LIST_PARALLAX_PRESETS],
     hover: LIST_ENTER_PRESETS,
     click: LIST_ENTER_PRESETS,
-    manual: [...LIST_ENTER_PRESETS, ...LIST_MARQUEE_PRESETS],
+    manual: [...LIST_ENTER_PRESETS, ...LIST_MARQUEE_PRESETS, ...LIST_REORDER_PRESETS],
     mount: [...LIST_ENTER_PRESETS, ...LIST_MARQUEE_PRESETS],
   },
   block: {

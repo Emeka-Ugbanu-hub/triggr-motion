@@ -1266,6 +1266,7 @@ function reserveStableParagraphSize(el: HTMLElement, prevText: string, nextText:
 
 const customAnimations: Record<string, (...args: any[]) => Animation | undefined> = {
   morph: animateMorph,
+  morphText: animateMorph,
   fadeSwap: animateFadeSwap,
   slideReplace: (el: HTMLElement, prev: string | undefined, text: string | undefined, duration: number, onEnd?: () => void) =>
     animateSlideReplace(el, prev, text, 1, duration, onEnd),
