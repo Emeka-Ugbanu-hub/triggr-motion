@@ -115,6 +115,14 @@ const CONTINUOUS_KEYFRAMES: Record<string, { keyframes: Keyframe[]; duration: nu
     duration: 2500,
     easing: "linear",
   },
+  focusRingPulse: {
+    keyframes: [
+      { boxShadow: '0 0 0 0 rgba(99, 102, 241, 0.4)' },
+      { boxShadow: '0 0 0 4px rgba(99, 102, 241, 0)' },
+    ],
+    duration: 2000,
+    easing: 'ease-out',
+  },
 }
 
 function hasScale(kf: Keyframe[]): boolean {

@@ -55,6 +55,7 @@ export type AnimationPreset =
   | "randomLetterSwap"
   | "textEffect"
   | "staggerText"
+  | "underlineDraw" | "underlineSlide" | "copyConfirm" | "colorShift" | "activeTabText"
 
 export type AnimationTrigger = "change" | "scroll" | "hover" | "click" | "manual" | "mount"
 export type AnimationTriggerInput = AnimationTrigger | readonly [AnimationTrigger, AnimationTrigger] | readonly AnimationTrigger[]

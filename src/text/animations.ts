@@ -257,4 +257,51 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
     out: [{ opacity: 1, transform: "translateY(0)" }, { opacity: 1, transform: "translateY(0)" }],
     in: [],
   },
+  underlineDraw: {
+    out: [
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'none', opacity: 1 },
+      { backgroundSize: '0% 2px', opacity: 1 },
+    ],
+    in: [
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
+      { backgroundSize: '100% 2px', opacity: 1 },
+    ],
+  },
+  underlineSlide: {
+    out: [
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
+      { backgroundSize: '0% 2px', opacity: 1 },
+    ],
+    in: [
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
+      { backgroundSize: '100% 2px', opacity: 1 },
+    ],
+  },
+  copyConfirm: {
+    out: [],
+    in: [
+      { transform: 'scale(0.9)', opacity: 0 },
+      { transform: 'scale(1.08)', opacity: 1, offset: 0.6 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+  },
+  colorShift: {
+    out: [
+      { filter: 'brightness(1)', opacity: 1 },
+      { filter: 'brightness(1.05)', opacity: 1 },
+    ],
+    in: [
+      { filter: 'brightness(1)', opacity: 0.7 },
+      { filter: 'brightness(1.08)', opacity: 1, offset: 0.4 },
+      { filter: 'brightness(1)', opacity: 1 },
+    ],
+  },
+  activeTabText: {
+    out: [],
+    in: [
+      { filter: 'brightness(0.6)', opacity: 0.7 },
+      { filter: 'brightness(1.1)', opacity: 1, offset: 0.5 },
+      { filter: 'brightness(1)', opacity: 1 },
+    ],
+  },
 }

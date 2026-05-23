@@ -182,6 +182,36 @@ const extended: Record<string, AnimationDefinition> = {
     options: { duration: 250, easing: EASE_OUT },
   },
   glideOut: { keyframes: [{ transform: "translateX(0)", opacity: 1 }, { transform: "translateX(-12px)", opacity: 0 }], options: { duration: 200, easing: EASE_OUT } },
+
+  staggerBlurIn: {
+    keyframes: [
+      { filter: 'blur(8px)', opacity: 0 },
+      { filter: 'blur(0px)', opacity: 1 },
+    ],
+    options: { duration: 400, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' },
+  },
+  feedAppend: {
+    keyframes: [
+      { transform: 'translateY(-20px)', opacity: 0 },
+      { transform: 'translateY(0)', opacity: 1 },
+    ],
+    options: { duration: 350, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' },
+  },
+  filterIn: {
+    keyframes: [
+      { transform: 'scale(0.85)', opacity: 0 },
+      { transform: 'scale(1.03)', opacity: 1, offset: 0.6 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+    options: { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' },
+  },
+  emptyToList: {
+    keyframes: [
+      { transform: 'translateY(10px)', opacity: 0 },
+      { transform: 'translateY(0)', opacity: 1 },
+    ],
+    options: { duration: 400, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' },
+  },
 }
 
 // Merge enterPresets + extended into a single lookup, typed as the union

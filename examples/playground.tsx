@@ -17,6 +17,7 @@ type AnimationProperties = Record<string, [string | number, string | number]>
 
 const SPRING_EASE = SPRING
 const SMOOTH_EASE = SMOOTH
+const EASE_IN = "cubic-bezier(0.0, 0.0, 0.2, 1)"
 
 const ANIMATION_DEFAULTS: Record<string, { duration: number; easing: string }> = {
   springBounce: { duration: 500, easing: SMOOTH_EASE },
@@ -25,6 +26,24 @@ const ANIMATION_DEFAULTS: Record<string, { duration: number; easing: string }> =
   springSlideDown: { duration: 450, easing: SMOOTH_EASE },
   morphRadius: { duration: 400, easing: SMOOTH_EASE },
   morphCircle: { duration: 400, easing: SMOOTH_EASE },
+  underlineDraw: { duration: 500, easing: SMOOTH_EASE },
+  underlineSlide: { duration: 250, easing: SMOOTH_EASE },
+  copyConfirm: { duration: 300, easing: SPRING_EASE },
+  colorShift: { duration: 350, easing: SMOOTH_EASE },
+  activeTabText: { duration: 250, easing: SMOOTH_EASE },
+  staggerBlurIn: { duration: 450, easing: SMOOTH_EASE },
+  feedAppend: { duration: 350, easing: SPRING_EASE },
+  filterIn: { duration: 300, easing: SPRING_EASE },
+  emptyToList: { duration: 400, easing: SMOOTH_EASE },
+  modalIn: { duration: 400, easing: SPRING_EASE },
+  modalOut: { duration: 200, easing: EASE_IN },
+  popoverIn: { duration: 300, easing: SPRING_EASE },
+  popoverOut: { duration: 150, easing: EASE_IN },
+  toastIn: { duration: 400, easing: SPRING_EASE },
+  toastOut: { duration: 200, easing: EASE_IN },
+  successCheckIn: { duration: 500, easing: SPRING_EASE },
+  buttonLoading: { duration: 600, easing: SMOOTH_EASE },
+  focusRingPulse: { duration: 2000, easing: SMOOTH_EASE },
 }
 
 const EASINGS: [string, string][] = [
@@ -69,6 +88,7 @@ const TEXT_CHANGE_PRESETS: AnimationPreset[] = [
   "fadeIn", "slideUp", "slideDown", "flip", "bounce",
   "popIn", "dropIn", "riseUp", "expandIn",
   "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
+  "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
 ]
 
 const TEXT_SCROLL_PRESETS: AnimationPreset[] = [
@@ -77,11 +97,13 @@ const TEXT_SCROLL_PRESETS: AnimationPreset[] = [
   "bigBang", "scatterAssemble", "pixelRain", "vortex", "dominoFall",
   "pendulum", "centerBurst", "gravityBounce",
   "slideUp", "slideDown", "flip", "bounce", "popIn", "dropIn", "riseUp", "expandIn",
+  "underlineDraw", "colorShift", "activeTabText",
 ]
 
 const TEXT_INTERACTION_PRESETS: AnimationPreset[] = [
   "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
   "highlight", "boldFlash", "blur", "randomLetterSwap", "splitReveal", "splitSlide", "textReveal",
+  "underlineSlide", "copyConfirm", "colorShift", "activeTabText",
 ]
 
 const TEXT_MOUNT_PRESETS: AnimationPreset[] = [
@@ -90,6 +112,7 @@ const TEXT_MOUNT_PRESETS: AnimationPreset[] = [
   "bigBang", "scatterAssemble", "pixelRain", "vortex", "dominoFall",
   "pendulum", "centerBurst", "gravityBounce",
   "slideUp", "slideDown", "flip", "bounce", "popIn", "dropIn", "riseUp", "expandIn",
+  "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
 ]
 
 const PARAGRAPH_ALL_PRESETS: ParagraphPreset[] = [
@@ -153,7 +176,7 @@ const LIST_PRESETS: ListAnimationPreset[] = [
 ]
 
 const LIST_EXIT_PRESETS: ListAnimationPreset[] = ["fadeOut", "slideOut", "slideOutLeft", "slideOutRight", "popOut", "bounceOut", "collapseOut", "flipOut", "itemFadeOut", "itemSlideOut", "itemCollapseOut", "glideOut"]
-const LIST_ENTER_PRESETS: ListAnimationPreset[] = ["fadeIn", "slideIn", "slideInLeft", "slideInRight", "popIn", "bounceIn", "expandIn", "flipIn", "staggerFadeIn", "staggerSlideUp", "staggerSlideLeft", "staggerZoomIn", "staggerPopIn", "stackIn", "wordCascade", "wordWave", "wordDrop", "wordFadeIn", "itemFadeIn", "itemSlideIn", "itemPopIn", "itemBounceIn", "glideIn"]
+const LIST_ENTER_PRESETS: ListAnimationPreset[] = ["fadeIn", "slideIn", "slideInLeft", "slideInRight", "popIn", "bounceIn", "expandIn", "flipIn", "staggerFadeIn", "staggerSlideUp", "staggerSlideLeft", "staggerZoomIn", "staggerPopIn", "stackIn", "wordCascade", "wordWave", "wordDrop", "wordFadeIn", "itemFadeIn", "itemSlideIn", "itemPopIn", "itemBounceIn", "glideIn", "staggerBlurIn", "feedAppend", "filterIn", "emptyToList"]
 const LIST_REORDER_PRESETS: ListAnimationPreset[] = ["flip", "smooth", "spring", "none"]
 const LIST_MARQUEE_PRESETS: ListAnimationPreset[] = ["marquee", "marqueeReverse", "marqueeFade"]
 const LIST_PARALLAX_PRESETS: ListAnimationPreset[] = ["parallax", "parallaxFast", "parallaxReverse", "tiltScroll", "scaleScroll", "parallaxStagger"]
@@ -171,9 +194,10 @@ const BLOCK_ONESHOT_PRESETS: BlockAnimationPreset[] = [
   "springBounce", "springScale", "springSlideUp", "springSlideDown",
   "morphRadius", "morphCircle",
   "press",
+  "modalIn", "popoverIn", "toastIn", "successCheckIn", "buttonLoading",
 ]
 
-const BLOCK_CONTINUOUS_PRESETS: BlockAnimationPreset[] = ["pulse", "float", "spin", "ping", "shimmer"]
+const BLOCK_CONTINUOUS_PRESETS: BlockAnimationPreset[] = ["pulse", "float", "spin", "ping", "shimmer", "focusRingPulse"]
 const BLOCK_SCROLL_LINK_PRESETS: BlockAnimationPreset[] = [
   "parallax", "parallaxFast", "parallaxReverse", "tiltScroll", "scaleScroll",
 ]
@@ -190,6 +214,7 @@ const BLOCK_ENTRANCE_PRESETS: BlockAnimationPreset[] = [
   "glideIn", "dropIn", "riseUp", "expandIn", "expandHeight", "fadeSlideUp",
   "blurIn", "clipUp", "clipLeft", "zoomIn",
   "springBounce", "springScale", "springSlideUp", "springSlideDown",
+  "modalIn", "popoverIn", "toastIn", "successCheckIn", "buttonLoading",
 ]
 const BLOCK_CHANGE_PRESETS: BlockAnimationPreset[] = BLOCK_ONESHOT_PRESETS
 const BLOCK_INTERACTION_PRESETS: BlockAnimationPreset[] = [
@@ -2857,6 +2882,189 @@ function LayoutToggle() {
   )
 }
 
+function ToastNotificationDemo({ duration, easing }: { duration: number; easing: string }) {
+  const [showToasts, setShowToasts] = useState(false)
+  const toasts = [
+    { id: 1, title: "File saved", desc: "project.config.json saved successfully", type: "success" },
+    { id: 2, title: "Deploy complete", desc: "Production build deployed to staging", type: "info" },
+    { id: 3, title: "Warning", desc: "API rate limit approaching threshold", type: "warn" },
+  ]
+  return (
+    <div className="section">
+      <PreviewCard>
+        <div className="real-demo" style={{ minHeight: 320, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+          <p className="demo-label">Toast notifications — mounts with toastIn and exits with toastOut for a clean notification centre.</p>
+          <div className="demo-actions">
+            <button className="fire-button" onClick={() => setShowToasts((v) => !v)}>
+              {showToasts ? "Dismiss All" : "Show Toasts"}
+            </button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", maxWidth: 400 }}>
+            {showToasts && toasts.map((t) => (
+              <BlockAnimate.Block
+                key={t.id}
+                trigger="mount"
+                animation="toastIn"
+                exitAnimation="toastOut"
+                show={showToasts}
+                duration={duration}
+                easing={easing}
+                unmountOnExit
+              >
+                <div className="notif-item" style={{ borderLeft: `3px solid ${t.type === "success" ? "#31c66d" : t.type === "warn" ? "#f59e0b" : "#6366f1"}` }}>
+                  <div className="notif-content">
+                    <strong>{t.title}</strong>
+                    <p>{t.desc}</p>
+                  </div>
+                </div>
+              </BlockAnimate.Block>
+            ))}
+          </div>
+        </div>
+        <Code>{`import { Animate } from "trigr/block"
+
+function ToastStack({ toasts }) {
+  return toasts.map((toast) => (
+    <Animate.Block
+      key={toast.id}
+      trigger="mount"
+      animation="toastIn"
+      exitAnimation="toastOut"
+      show={true}
+      unmountOnExit
+    >
+      <div className="toast">
+        <strong>{toast.title}</strong>
+        <p>{toast.desc}</p>
+      </div>
+    </Animate.Block>
+  ))
+}`}</Code>
+      </PreviewCard>
+    </div>
+  )
+}
+
+function UnderlineNavDemo({ duration, easing }: { duration: number; easing: string }) {
+  const [activeTab, setActiveTab] = useState(0)
+  const tabs = ["Overview", "Analytics", "Settings", "Billing"]
+  return (
+    <div className="section">
+      <PreviewCard>
+        <div className="real-demo" style={{ minHeight: 200, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
+          <p className="demo-label">Navigation tabs — underlineDraw on mount, underlineSlide on hover, activeTabText on selection.</p>
+          <div className="demo-nav" style={{ display: "flex", gap: 4, background: "var(--bg-elevated)", borderRadius: 12, padding: 6, border: "1px solid var(--border)" }}>
+            {tabs.map((tab, i) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(i)}
+                style={{
+                  padding: "8px 20px",
+                  border: "none",
+                  borderRadius: 8,
+                  background: i === activeTab ? "var(--accent)" : "transparent",
+                  color: i === activeTab ? "var(--bg-elevated)" : "var(--text-secondary)",
+                  fontWeight: i === activeTab ? 600 : 400,
+                  fontSize: 13.5,
+                  cursor: "pointer",
+                  transition: "none",
+                }}
+              >
+                <BlockAnimate.Block
+                  trigger="hover"
+                  animation={i === activeTab ? "none" : "underlineSlide"}
+                  duration={250}
+                  easing={easing}
+                >
+                  <TextAnimate.Text
+                    trigger={i === activeTab ? "mount" : "hover"}
+                    animation={i === activeTab ? "activeTabText" : "underlineSlide"}
+                    duration={duration}
+                    easing={easing}
+                  >
+                    {tab}
+                  </TextAnimate.Text>
+                </BlockAnimate.Block>
+              </button>
+            ))}
+          </div>
+        </div>
+        <Code>{`import { Animate } from "trigr/text"  
+import { Animate as BlockAnimate } from "trigr/block"
+
+function NavTabs({ tabs }) {
+  const [active, setActive] = useState(0)
+  return tabs.map((tab, i) => (
+    <button onClick={() => setActive(i)}>
+      <BlockAnimate.Block
+        trigger="hover"
+        animation="underlineSlide"
+      >
+        <Animate.Text
+          trigger={i === active ? "mount" : "hover"}
+          animation={i === active ? "activeTabText" : "underlineSlide"}
+        >
+          {tab}
+        </Animate.Text>
+      </BlockAnimate.Block>
+    </button>
+  ))
+}`}</Code>
+      </PreviewCard>
+    </div>
+  )
+}
+
+function FilterFeedDemo({ duration, easing, stagger }: { duration: number; easing: string; stagger: number }) {
+  const items = ["Dashboard", "Settings", "Billing", "Analytics", "Users", "API Keys", "Webhooks", "Audit Log", "Security", "Integrations", "Team", "Plans", "SSO Config", "Rate Limits", "Deploy Keys", "Environments"]
+  const [query, setQuery] = useState("")
+  const filtered = query ? items.filter((i) => i.toLowerCase().includes(query.toLowerCase())) : []
+  return (
+    <div className="section">
+      <PreviewCard>
+        <div className="real-demo" style={{ minHeight: 400, display: "flex", flexDirection: "column", gap: 16, padding: 32 }}>
+          <p className="demo-label">Filtered search results — items animate in with filterIn when results appear, feedAppend for new items.</p>
+          <div className="field-row">
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search settings..." style={{ width: "100%", maxWidth: 300 }} />
+            <button className="fire-button" onClick={() => setQuery("")}>Clear</button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {query && (
+              <ListAnimate.List trigger="change" animation="filterIn" duration={duration} easing={easing} stagger={stagger}>
+                {filtered.map((item) => (
+                  <div key={item} className="activity-row">
+                    <div className="activity-body">{item}</div>
+                  </div>
+                ))}
+              </ListAnimate.List>
+            )}
+            {query && filtered.length === 0 && <p className="demo-label" style={{ color: "var(--text-tertiary)" }}>No results for &quot;{query}&quot;</p>}
+          </div>
+        </div>
+        <Code>{`import { Animate } from "trigr/list"
+
+function SearchFilter({ items }) {
+  const [query, setQuery] = useState("")
+  const filtered = items.filter((i) =>
+    i.toLowerCase().includes(query.toLowerCase()))
+
+  return (
+    <Animate.List
+      trigger="change"
+      animation="filterIn"
+      stagger={40}
+    >
+      {filtered.map((item) => (
+        <Row key={item}>{item}</Row>
+      ))}
+    </Animate.List>
+  )
+}`}</Code>
+      </PreviewCard>
+    </div>
+  )
+}
+
 function ComposedSection() {
   const { threshold, stagger, listSpeed } = useRuntimeOptions()
   const [duration] = useState(400)
@@ -2874,6 +3082,9 @@ function ComposedSection() {
       <HeroSectionDemo duration={duration} easing={easing} />
       <DragDismissDemo />
       <LayoutIdDemo />
+      <ToastNotificationDemo duration={duration} easing={easing} />
+      <UnderlineNavDemo duration={duration} easing={easing} />
+      <FilterFeedDemo duration={duration} easing={easing} stagger={stagger} />
     </div>
   )
 }
@@ -6067,6 +6278,8 @@ button:disabled:hover { background: var(--bg-elevated); border-color: var(--bord
 }
 
 /* ── Composed Demos ──────────────────────── */
+.demo-actions { display: flex; gap: 10px; margin-bottom: 16px; }
+.demo-nav button { font-family: var(--font); }
 .composed-demo { display: block; }
 .composed-feed { display: flex; flex-direction: column; gap: 12px; max-width: 620px; margin: 0 auto; }
 .repo-card { padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elevated); text-align: left; transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease); }

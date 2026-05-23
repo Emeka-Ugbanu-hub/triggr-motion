@@ -31,6 +31,11 @@ export const presetCategory: Record<string, PresetCategory> = {
   pulse: "continuous",
   spin: "continuous", ping: "continuous", shimmer: "continuous",
   ripple: "overlay", burst: "overlay",
+  modalIn: "oneshot", modalOut: "oneshot",
+  popoverIn: "oneshot", popoverOut: "oneshot",
+  toastIn: "oneshot", toastOut: "oneshot",
+  successCheckIn: "oneshot", buttonLoading: "oneshot",
+  focusRingPulse: "oneshot",
 }
 
 export const presets: Record<string, AnimationDefinition> = {
@@ -331,5 +336,83 @@ export const presets: Record<string, AnimationDefinition> = {
   press: {
     in: [{ transform: "scale(1)", opacity: 1 }, { transform: "scale(0.96)", opacity: 1 }],
     out: [{ transform: "scale(0.96)", opacity: 1 }, { transform: "scale(1)", opacity: 1 }],
+  },
+  modalIn: {
+    in: [
+      { transform: 'scale(0.85)', opacity: 0 },
+      { transform: 'scale(1.02)', opacity: 1, offset: 0.65 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+  },
+  modalOut: {
+    in: [],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.85)', opacity: 0 },
+    ],
+  },
+  popoverIn: {
+    in: [
+      { transform: 'scale(0)', opacity: 0 },
+      { transform: 'scale(1.05)', opacity: 1, offset: 0.7 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.95)', opacity: 0 },
+    ],
+  },
+  popoverOut: {
+    in: [],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.9)', opacity: 0 },
+    ],
+  },
+  toastIn: {
+    in: [
+      { transform: 'translateY(-24px)', opacity: 0 },
+      { transform: 'translateY(2px)', opacity: 1, offset: 0.7 },
+      { transform: 'translateY(0)', opacity: 1 },
+    ],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(-12px)', opacity: 0 },
+    ],
+  },
+  toastOut: {
+    in: [],
+    out: [
+      { transform: 'translateY(0)', opacity: 1 },
+      { transform: 'translateY(-12px)', opacity: 0 },
+    ],
+  },
+  successCheckIn: {
+    in: [
+      { transform: 'scale(0.4)', opacity: 0 },
+      { transform: 'scale(1.15)', opacity: 1, offset: 0.55 },
+      { transform: 'scale(0.92)', offset: 0.75 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+    out: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.6)', opacity: 0 },
+    ],
+  },
+  buttonLoading: {
+    in: [
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0.96)', opacity: 0.7 },
+      { transform: 'scale(1)', opacity: 1 },
+    ],
+    out: [],
+  },
+  focusRingPulse: {
+    in: [],
+    out: [],
   },
 }

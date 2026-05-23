@@ -27,6 +27,7 @@ export type BlockAnimationPreset =
   | "press" | "ripple" | "burst"
   | "spin" | "ping" | "shimmer"
   | "tilt3D" | "rotate3D" | "depth"
+  | "modalIn" | "modalOut" | "popoverIn" | "popoverOut" | "toastIn" | "toastOut" | "successCheckIn" | "buttonLoading" | "focusRingPulse"
 
 export type AnimationTrigger = "change" | "scroll" | "hover" | "click" | "manual" | "mount"
 export type AnimationTriggerInput = AnimationTrigger | readonly [AnimationTrigger, AnimationTrigger] | readonly AnimationTrigger[]
