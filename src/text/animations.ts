@@ -264,22 +264,22 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
   },
   underlineDraw: {
     out: [
-      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'none', opacity: 1 },
-      { backgroundSize: '0% 2px', opacity: 1 },
+      { backgroundSize: '100% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
+      { backgroundSize: '100% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
     ],
     in: [
-      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
-      { backgroundSize: '100% 2px', opacity: 1 },
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
+      { backgroundSize: '100% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
     ],
   },
   underlineSlide: {
     out: [
-      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
-      { backgroundSize: '0% 2px', opacity: 1 },
+      { backgroundSize: '100% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
+      { backgroundSize: '0% 2px', backgroundPosition: '100% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
     ],
     in: [
-      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', opacity: 1 },
-      { backgroundSize: '100% 2px', opacity: 1 },
+      { backgroundSize: '0% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
+      { backgroundSize: '100% 2px', backgroundPosition: '0% 100%', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(currentColor, currentColor)', opacity: 1 },
     ],
   },
   copyConfirm: {
@@ -292,13 +292,13 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
   },
   brightnessShift: {
     out: [
-      { filter: 'brightness(1)', opacity: 1 },
-      { filter: 'brightness(1.05)', opacity: 1 },
+      { filter: 'brightness(1) saturate(1)', opacity: 1 },
+      { filter: 'brightness(1.15) saturate(1.2)', opacity: 0.92 },
     ],
     in: [
-      { filter: 'brightness(1)', opacity: 0.7 },
-      { filter: 'brightness(1.08)', opacity: 1, offset: 0.4 },
-      { filter: 'brightness(1)', opacity: 1 },
+      { filter: 'brightness(0.7) saturate(0.6)', opacity: 0.65 },
+      { filter: 'brightness(1.2) saturate(1.3)', opacity: 1 },
+      { filter: 'brightness(1) saturate(1)', opacity: 1 },
     ],
   },
   activeTabText: {

@@ -38,6 +38,11 @@ function applyInitialState(el: HTMLElement, keyframes: Keyframe[]) {
   if (!first) return
   if ((first as any).opacity !== undefined) el.style.opacity = String((first as any).opacity)
   if ((first as any).transform !== undefined) el.style.transform = String((first as any).transform)
+  if ((first as any).filter !== undefined) el.style.filter = String((first as any).filter)
+  if ((first as any).backgroundImage !== undefined) el.style.backgroundImage = String((first as any).backgroundImage)
+  if ((first as any).backgroundSize !== undefined) el.style.backgroundSize = String((first as any).backgroundSize)
+  if ((first as any).backgroundPosition !== undefined) el.style.backgroundPosition = String((first as any).backgroundPosition)
+  if ((first as any).backgroundRepeat !== undefined) el.style.backgroundRepeat = String((first as any).backgroundRepeat)
 }
 
 function applyFinalState(el: HTMLElement, keyframes: Keyframe[]) {
@@ -45,6 +50,11 @@ function applyFinalState(el: HTMLElement, keyframes: Keyframe[]) {
   if (!last) return
   if ((last as any).opacity !== undefined) el.style.opacity = String((last as any).opacity)
   if ((last as any).transform !== undefined) el.style.transform = String((last as any).transform)
+  if ((last as any).filter !== undefined) el.style.filter = String((last as any).filter)
+  if ((last as any).backgroundImage !== undefined) el.style.backgroundImage = String((last as any).backgroundImage)
+  if ((last as any).backgroundSize !== undefined) el.style.backgroundSize = String((last as any).backgroundSize)
+  if ((last as any).backgroundPosition !== undefined) el.style.backgroundPosition = String((last as any).backgroundPosition)
+  if ((last as any).backgroundRepeat !== undefined) el.style.backgroundRepeat = String((last as any).backgroundRepeat)
 }
 
 function rebaseKeyframes(keyframes: Keyframe[], options?: TextPresetOptions): Keyframe[] {
@@ -80,7 +90,7 @@ function runAnimation(
   presetOptions?: TextPresetOptions,
 ): Animation {
   const hlRunId = beginAnimationRun(el)
-  el.style.willChange = "transform, opacity"
+  el.style.willChange = "transform, opacity, filter, background-position, background-size"
 
   const def = presets[preset]
   if (!def) {
@@ -118,7 +128,18 @@ function prefersReducedMotion(): boolean {
 }
 
 function reducedKeyframes(keyframes: Keyframe[]): Keyframe[] {
-  return keyframes.map(({ opacity }) => ({ opacity: opacity ?? 1 }))
+  const last = keyframes[keyframes.length - 1]
+  const out: Record<string, unknown> = {}
+  for (const kf of keyframes) {
+    out.opacity = (kf as any).opacity ?? 1
+  }
+  if (last) {
+    if ((last as any).backgroundImage) out.backgroundImage = (last as any).backgroundImage
+    if ((last as any).backgroundSize) out.backgroundSize = (last as any).backgroundSize
+    if ((last as any).backgroundPosition) out.backgroundPosition = (last as any).backgroundPosition
+    if ((last as any).backgroundRepeat) out.backgroundRepeat = (last as any).backgroundRepeat
+  }
+  return [out as Keyframe]
 }
 
 function runPropertyAnimation(
@@ -2869,7 +2890,7 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
     setPhase("exiting")
 
     const exitFrames = def.out.length ? def.out : def.in.length ? def.in : [{ opacity: 0 }]
-    el.style.willChange = "transform, opacity"
+  el.style.willChange = "transform, opacity, filter, background-position, background-size"
     applyInitialState(el, exitFrames)
     const kf = prefersReducedMotion() ? reducedKeyframes(exitFrames) : exitFrames
     exitAnimRef.current = el.animate(kf, {
