@@ -522,6 +522,10 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
   useLayoutEffect(() => {
     if (!layoutId || !ref.current) return
 
+    if (animRef.current?.playState === "running") return
+    if (dragEnabled && dragStartRef.current) return
+    if (exitAnimRef.current?.playState === "running") return
+
     const prevRect = layoutSnapshotRef.current
     const nextRect = ref.current.getBoundingClientRect()
 
@@ -530,6 +534,23 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
       const deltaY = prevRect.top - nextRect.top
       const scaleX = prevRect.width / nextRect.width
       const scaleY = prevRect.height / nextRect.height
+
+      const savedHover: Record<string, string> = {}
+      if (hoverApplied.current) {
+        const styles = HOVER_STATE_CSS[hoverAnimRef.current ?? ""]
+        if (styles) {
+          for (const key in styles) {
+            savedHover[key] = (ref.current!.style as any)[key]
+            ;(ref.current!.style as any)[key] = ""
+          }
+        }
+      }
+
+      const prevWillChange = ref.current.style.willChange
+      const prevTransform = ref.current.style.transform
+      const prevTransition = ref.current.style.transition
+
+      ref.current.getAnimations().forEach((a) => a.cancel())
 
       ref.current.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
       ref.current.style.transformOrigin = "top left"
@@ -540,11 +561,14 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
         ref.current.style.transform = ""
 
         const onTransitionEnd = () => {
-          if (ref.current) {
-            ref.current.style.transition = ""
-            ref.current.style.transformOrigin = ""
+          if (!ref.current) return
+          ref.current.style.transition = prevTransition
+          ref.current.style.transformOrigin = ""
+          ref.current.style.willChange = prevWillChange
+          if (Object.keys(savedHover).length) {
+            setStyles(ref.current, savedHover)
           }
-          ref.current?.removeEventListener("transitionend", onTransitionEnd)
+          ref.current.removeEventListener("transitionend", onTransitionEnd)
         }
         ref.current.addEventListener("transitionend", onTransitionEnd)
       })
@@ -937,6 +961,8 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
       window.removeEventListener("pointercancel", handlePointerCancel)
       el.style.userSelect = prevUserSelect
       el.style.touchAction = prevTouchAction
+      finishWillChange(el)
+      el.style.transition = ""
     }
   }, [dragEnabled, dragX, dragY, dragThresholdPx, dragElasticVal, dragSnapBackMs, onDragEnd])
 
