@@ -18,6 +18,7 @@ export type AnimationPreset =
   | "decoder"
   | "fadeAway"
   | "fadeIn"
+  | "fadeOut"
   | "slideReplace"
   | "letterDrop"
   | "glitch"

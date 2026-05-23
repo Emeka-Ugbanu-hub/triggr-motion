@@ -3885,6 +3885,8 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       anim.onfinish = () => {
         if (!isActiveAnimationRun(hlEl, hlRunId)) return
         animRef.current = null
+        hlEl.style.backgroundPosition = "0% 0"
+        hlEl.style.backgroundSize = "200% 100%"
         hlEl.style.willChange = "auto"
         onAnimationEnd?.()
       }

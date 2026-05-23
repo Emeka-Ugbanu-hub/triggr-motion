@@ -61,6 +61,10 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
     out: fadeOut,
     in: fadeIn,
   },
+  fadeOut: {
+    out: fadeOut,
+    in: fadeIn,
+  },
   slideReplace: {
     out: [{ opacity: 1, transform: "translateX(0)" }, { opacity: 0, transform: "translateX(-10px)" }],
     in: [{ opacity: 0, transform: "translateX(10px)" }, { opacity: 1, transform: "translateX(0)" }],
@@ -413,15 +417,29 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
   },
 
   strikeOut: {
-    out: [],
-    in: [],
+    out: [
+      { opacity: 1, transform: "translateY(0)", textDecorationColor: "currentColor" },
+      { opacity: 0.72, transform: "translateY(0)", textDecorationColor: "currentColor", offset: 0.45 },
+      { opacity: 0, transform: "translateY(-4px)", textDecorationColor: "currentColor" },
+    ],
+    in: fadeIn,
   },
   typeOut: {
-    out: [],
-    in: [],
+    out: [
+      { opacity: 1, clipPath: "inset(0 0 0 0)", transform: "translateY(0)" },
+      { opacity: 0, clipPath: "inset(0 0 0 100%)", transform: "translateY(0)" },
+    ],
+    in: [
+      { opacity: 0, clipPath: "inset(0 100% 0 0)", transform: "translateY(0)" },
+      { opacity: 1, clipPath: "inset(0 0 0 0)", transform: "translateY(0)" },
+    ],
   },
   scrambleOut: {
-    out: [],
-    in: [],
+    out: [
+      { opacity: 1, filter: "blur(0px)", transform: "translateY(0)" },
+      { opacity: 0.45, filter: "blur(2px)", transform: "translateY(-2px)", offset: 0.55 },
+      { opacity: 0, filter: "blur(4px)", transform: "translateY(-4px)" },
+    ],
+    in: fadeIn,
   },
 }
