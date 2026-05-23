@@ -3097,6 +3097,12 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const inDuration = motionDuration * 0.55
       const lineDuration = motionDuration * 0.65
 
+      const textWidth = measureInlineText(el, next).width
+      const textHeight = measureInlineText(el, next).height
+
+      line.style.width = `${textWidth}px`
+      line.style.bottom = "0"
+
       oldEl.animate(
         [{ transform: "translateX(0)" }, { transform: `translateX(-${containerWidth}px)` }],
         { duration: outDuration, easing: EASE_IN, fill: "forwards" },
@@ -3866,6 +3872,12 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const hlRunId = beginAnimationRun(hlEl)
       const hlColor = highlightColorProp ?? colorWithAlpha(getComputedStyle(hlEl).color, 0.55)
       const hlDuration = motionDuration
+
+      // Reset any prior highlight state so repeated triggers work
+      hlEl.style.background = ""
+      hlEl.style.backgroundSize = ""
+      hlEl.style.backgroundRepeat = ""
+      hlEl.style.backgroundPosition = ""
 
       hlEl.style.background = `linear-gradient(120deg, ${hlColor} 50%, transparent 50%)`
       hlEl.style.backgroundSize = "200% 100%"
