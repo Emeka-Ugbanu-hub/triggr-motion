@@ -797,15 +797,16 @@ function animateSlideReplace(
   const newText = nextValue ?? el.textContent ?? ''
   if (!oldText && !newText) return
 
+  const width = el.getBoundingClientRect().width
   const { oldEl, newEl, cleanup } = prepareStableParagraphSwap(el, oldText, newText)
-  newEl.style.transform = `translateX(${100 * direction}%)`
+  newEl.style.transform = `translateX(${width * direction}px)`
 
   oldEl.animate(
-    [{ transform: 'translateX(0)' }, { transform: `translateX(${-100 * direction}%)` }],
+    [{ transform: 'translateX(0)' }, { transform: `translateX(${-width * direction}px)` }],
     { duration: duration * 0.4, easing: EASE_OUT, fill: 'forwards' },
   )
   const anim = newEl.animate(
-    [{ transform: `translateX(${100 * direction}%)` }, { transform: 'translateX(0)' }],
+    [{ transform: `translateX(${width * direction}px)` }, { transform: 'translateX(0)' }],
     { duration: duration * 0.6, easing: EASE_IN, fill: 'forwards' },
   )
   anim.onfinish = () => { cleanup(); onEnd?.() }
@@ -1330,6 +1331,8 @@ function findTextChild(el: HTMLElement): HTMLElement | null {
 }
 
 function prepareStableParagraphSwap(el: HTMLElement, oldText: string, newText: string): { oldEl: HTMLDivElement; newEl: HTMLDivElement; cleanup: () => void } {
+  const containerHeight = el.getBoundingClientRect().height
+  el.style.minHeight = containerHeight + 'px'
   el.textContent = ''
   el.style.position = 'relative'
   const oldEl = document.createElement('div')
@@ -1347,6 +1350,7 @@ function prepareStableParagraphSwap(el: HTMLElement, oldText: string, newText: s
     newEl,
     cleanup: () => {
       el.style.position = ''
+      el.style.minHeight = ''
       el.textContent = newText
     },
   }
@@ -1505,51 +1509,105 @@ function setupScrollWordReveal(el: HTMLElement, text: string, threshold = 0.4, o
   if (useLines) {
     const refEl = textChild || el
     const lineDivs = splitLinesAsElements(content, refEl)
-    if (lineDivs.length <= 1) {
-      // Short enough that word reveal works fine
-      if (!textChild) {
-        const prevWidth = el.style.width
-        const prevMinHeight = el.style.minHeight
-        const prevOverflow = el.style.overflow
-        const currentRect = el.getBoundingClientRect()
-        const fragments = splitWordsAsElements(content)
-        const wordSpans: HTMLSpanElement[] = fragments.filter((n): n is HTMLSpanElement => n instanceof HTMLSpanElement)
-        if (wordSpans.length === 0) { onEnd?.(); return }
-        el.textContent = ''
-        el.style.width = prevWidth || `${Math.ceil(currentRect.width)}px`
-        el.style.minHeight = prevMinHeight || `${Math.ceil(currentRect.height)}px`
-        el.style.overflow = 'hidden'
-        for (const node of fragments) {
-          el.appendChild(node)
-          if (node instanceof HTMLSpanElement) {
-            node.style.opacity = '0.18'
-            node.style.transition = 'opacity 120ms linear'
-            node.style.willChange = 'opacity'
+    if (lineDivs.length > 1) {
+      const prevWidth = el.style.width
+      const prevMinHeight = el.style.minHeight
+      const prevOverflow = el.style.overflow
+      const originalInnerHTML = refEl.innerHTML
+
+      el.style.width = prevWidth || `${Math.ceil(el.getBoundingClientRect().width)}px`
+      el.style.minHeight = prevMinHeight || `${Math.ceil(el.getBoundingClientRect().height)}px`
+      el.style.overflow = 'hidden'
+
+      refEl.textContent = ''
+      for (const div of lineDivs) {
+        div.style.opacity = '0.18'
+        div.style.transition = 'opacity 120ms linear'
+        div.style.willChange = 'opacity'
+        refEl.appendChild(div)
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              const line = entry.target as HTMLElement
+              line.style.opacity = '1'
+              observer.unobserve(line)
+            }
+          }
+        },
+        scrollObserverOptions(el, threshold),
+      )
+
+      lineDivs.forEach(div => observer.observe(div))
+      return () => {
+        observer.disconnect()
+        lineDivs.forEach(d => d.style.willChange = 'auto')
+        refEl.innerHTML = originalInnerHTML
+        el.style.width = prevWidth
+        el.style.minHeight = prevMinHeight
+        el.style.overflow = prevOverflow
+        onEnd?.()
+      }
+    }
+  }
+
+  // Word-based reveal fallback for remaining cases
+  {
+    const target = textChild || el
+    const isTargetChild = target === textChild
+    const prevWidth = el.style.width
+    const prevMinHeight = el.style.minHeight
+    const prevOverflow = el.style.overflow
+
+    const fragments = splitWordsAsElements(content)
+    const wordSpans: HTMLSpanElement[] = fragments.filter((n): n is HTMLSpanElement => n instanceof HTMLSpanElement)
+
+    if (wordSpans.length === 0) { onEnd?.(); return () => {} }
+
+    const currentRect = el.getBoundingClientRect()
+    el.style.width = prevWidth || `${Math.ceil(currentRect.width)}px`
+    el.style.minHeight = prevMinHeight || `${Math.ceil(currentRect.height)}px`
+    el.style.overflow = 'hidden'
+
+    const originalInnerHTML = target.innerHTML
+    target.textContent = ''
+    for (const node of fragments) {
+      target.appendChild(node)
+      if (node instanceof HTMLSpanElement) {
+        node.style.opacity = '0.18'
+        node.style.transition = 'opacity 120ms linear'
+        node.style.willChange = 'opacity'
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const word = entry.target as HTMLSpanElement
+            word.style.opacity = '1'
+            observer.unobserve(word)
           }
         }
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                const word = entry.target as HTMLSpanElement
-                word.style.opacity = '1'
-                observer.unobserve(word)
-              }
-            }
-          },
-          scrollObserverOptions(el, threshold),
-        )
-        wordSpans.forEach(span => observer.observe(span))
-        return () => {
-          observer.disconnect()
-          wordSpans.forEach(s => s.style.willChange = 'auto')
-          el.textContent = ''
-          el.style.width = prevWidth
-          el.style.minHeight = prevMinHeight
-          el.style.overflow = prevOverflow
-          onEnd?.()
-        }
+      },
+      scrollObserverOptions(el, threshold),
+    )
+
+    wordSpans.forEach(span => observer.observe(span))
+    return () => {
+      observer.disconnect()
+      wordSpans.forEach(s => s.style.willChange = 'auto')
+      if (isTargetChild) {
+        target.innerHTML = originalInnerHTML
+      } else {
+        el.textContent = ''
       }
+      el.style.width = prevWidth
+      el.style.minHeight = prevMinHeight
+      el.style.overflow = prevOverflow
+      onEnd?.()
     }
   }
 }
@@ -1567,7 +1625,7 @@ export const AnimateParagraph = forwardRef<AnimateParagraphHandle, AnimateParagr
   unmountOnExit = true,
   highlightColor: highlightColorProp,
   duration = 300,
-  easing = SPRING,
+  easing = SMOOTH,
   delay = 0,
   threshold = 0.4,
   repeat = false,

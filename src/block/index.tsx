@@ -70,6 +70,7 @@ const HOVER_STATE_CSS: Record<string, Record<string, string>> = {
   glow: { filter: "brightness(1.15)" },
   shadow: { boxShadow: "0 8px 24px currentColor" },
   borderPop: { borderColor: "currentColor", borderWidth: "2px" },
+  press: { transform: "scale(0.96)" },
 }
 
 const CONTINUOUS_KEYFRAMES: Record<string, { keyframes: Keyframe[]; duration: number; easing: string }> = {
@@ -528,20 +529,12 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
       return
     }
 
-    const animationEasing = name === "press" ? SNAPPY : easing
     runTimerRef.current = setTimeout(finishRun, Math.max(500, motionDuration + delay + 300))
-    animRef.current = runAnimation(el, def.in, { duration: motionDuration, easing: animationEasing, delay }, finishRun, presetOptions)
+    animRef.current = runAnimation(el, def.in, { duration: motionDuration, easing, delay }, finishRun, presetOptions)
 
     if (Object.keys(savedHoverStyles).length) {
       animRef.current.addEventListener("finish", restoreHover, { once: true })
       animRef.current.addEventListener("cancel", restoreHover, { once: true })
-    }
-
-    // press: reset transform after quick scale down
-    if (name === "press") {
-      animRef.current.addEventListener("finish", () => {
-        el.animate([{ transform: "scale(1)" }, { transform: "scale(1)" }], { duration: 80, fill: "forwards" })
-      }, { once: true })
     }
   }, [activeTrigger, delay, duration, easing, finishRun, getAnimationFor, properties])
 
@@ -954,8 +947,11 @@ const AnimateBlock = forwardRef<AnimateBlockHandle, AnimateBlockProps>(function 
       }
       dragLastPosRef.current = { x: e.clientX, y: e.clientY, t: now }
 
-      const offsetX = dragX ? dx * dragElasticVal : 0
-      const offsetY = dragY ? dy * dragElasticVal : 0
+      const elastic = dragElastic ?? 0.5
+      const factorX = Math.abs(dx) < 50 ? elastic : elastic * elastic * (1 + (Math.abs(dx) - 50) / 100)
+      const factorY = Math.abs(dy) < 50 ? elastic : elastic * elastic * (1 + (Math.abs(dy) - 50) / 100)
+      const offsetX = dragX ? dx * factorX : 0
+      const offsetY = dragY ? dy * factorY : 0
       dragOffsetRef.current = { x: offsetX, y: offsetY }
       el!.style.transform = `translate(${offsetX}px, ${offsetY}px)`
     }

@@ -1,8 +1,8 @@
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import type { ListDiff } from "./types"
 
 export function useListDiff(keys: (string | number)[]): ListDiff {
-  const prevKeysRef = useRef<(string | number)[]>(keys)
+  const prevKeysRef = useRef<(string | number)[]>([])
   const prev = prevKeysRef.current
 
   const prevSet = new Set(prev)
@@ -21,7 +21,9 @@ export function useListDiff(keys: (string | number)[]): ListDiff {
     }
   })
 
-  prevKeysRef.current = keys
+  useEffect(() => {
+    prevKeysRef.current = keys
+  })
 
   return { added, removed, reordered, stable }
 }

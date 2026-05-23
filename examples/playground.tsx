@@ -30,7 +30,7 @@ const ANIMATION_DEFAULTS: Record<string, { duration: number; easing: string }> =
   underlineDraw: { duration: 500, easing: SMOOTH_EASE },
   underlineSlide: { duration: 250, easing: SMOOTH_EASE },
   copyConfirm: { duration: 300, easing: SPRING_EASE },
-  colorShift: { duration: 350, easing: SMOOTH_EASE },
+  brightnessShift: { duration: 350, easing: SMOOTH_EASE },
   activeTabText: { duration: 250, easing: SMOOTH_EASE },
   staggerBlurIn: { duration: 450, easing: SMOOTH_EASE },
   feedAppend: { duration: 350, easing: SPRING_EASE },
@@ -129,7 +129,7 @@ const TEXT_ALL_PRESETS: AnimationPreset[] = [
   "popIn", "dropIn", "riseUp", "expandIn", "shrinkOut",
   "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
   "fadeAway", "liftReveal",
-  "underlineDraw", "underlineSlide", "copyConfirm", "colorShift", "activeTabText",
+  "underlineDraw", "underlineSlide", "copyConfirm", "brightnessShift", "activeTabText",
 ]
 
 const TEXT_CHANGE_PRESETS: AnimationPreset[] = [
@@ -138,7 +138,7 @@ const TEXT_CHANGE_PRESETS: AnimationPreset[] = [
   "highlight", "boldFlash", "blur", "glitch",
   "slideUp", "slideDown", "flip", "bounce",
   "popIn", "dropIn", "riseUp", "expandIn",
-  "fadeIn", "underlineDraw", "underlineSlide", "colorShift",
+  "fadeIn", "underlineDraw", "underlineSlide", "brightnessShift",
   "fadeAway", "liftReveal",
 ]
 
@@ -152,13 +152,13 @@ const TEXT_SCROLL_PRESETS: AnimationPreset[] = [
 const TEXT_INTERACTION_PRESETS: AnimationPreset[] = [
   "bump", "jitter", "popUp", "jello", "shake", "pulse", "blink", "wave", "ping",
   "highlight", "boldFlash", "blur", "textReveal",
-  "underlineSlide", "underlineDraw", "copyConfirm", "colorShift", "activeTabText", "shrinkOut",
+  "underlineSlide", "underlineDraw", "copyConfirm", "brightnessShift", "activeTabText", "shrinkOut",
 ]
 
 const TEXT_HOVER_PRESETS: AnimationPreset[] = [
   "bump", "jitter", "jello", "shake", "pulse", "blink", "wave",
   "highlight", "boldFlash", "blur",
-  "underlineSlide", "underlineDraw", "colorShift", "activeTabText",
+  "underlineSlide", "underlineDraw", "brightnessShift", "activeTabText",
 ]
 
 const TEXT_CLICK_PRESETS: AnimationPreset[] = [
@@ -173,7 +173,7 @@ const TEXT_MOUNT_PRESETS: AnimationPreset[] = [
   "pendulum", "centerBurst", "gravityBounce",
   "textRotate", "gooeyMorph", "randomLetterSwap",
   "slideUp", "slideDown", "flip", "bounce", "popIn", "dropIn", "riseUp", "expandIn",
-  "underlineDraw", "copyConfirm", "colorShift", "activeTabText",
+  "underlineDraw", "copyConfirm", "brightnessShift", "activeTabText",
   "fadeAway", "liftReveal",
 ]
 

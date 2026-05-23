@@ -14,8 +14,8 @@ export function usePositionTracker(containerRef: React.RefObject<HTMLElement | n
       if (!key) continue
       const rect = (child as HTMLElement).getBoundingClientRect()
       map.set(key, {
-        top: rect.top - containerRect.top,
-        left: rect.left - containerRect.left,
+        top: rect.top - containerRect.top - el.clientTop,
+        left: rect.left - containerRect.left - el.clientLeft,
         width: rect.width,
         height: rect.height,
       })

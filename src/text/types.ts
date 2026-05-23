@@ -62,7 +62,7 @@ export type AnimationPreset =
   | "randomLetterSwap"
   | "textEffect"
   | "staggerText"
-  | "underlineDraw" | "underlineSlide" | "copyConfirm" | "colorShift" | "activeTabText"
+  | "underlineDraw" | "underlineSlide" | "copyConfirm" | "brightnessShift" | "activeTabText"
   | "fadeOutUp" | "fadeOutDown" | "slideOutUp" | "slideOutDown" | "slideOutLeft" | "slideOutRight" | "scaleOut" | "blurOut" | "clipOut" | "strikeOut" | "typeOut" | "scrambleOut" | "popOut"
 
 export type AnimationTrigger = "change" | "scroll" | "hover" | "click" | "manual" | "mount"

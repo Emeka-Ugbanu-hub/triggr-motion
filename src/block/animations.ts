@@ -21,7 +21,7 @@ export const presetCategory: Record<string, PresetCategory> = {
   zoomIn: "oneshot", zoomOut: "oneshot",
   springBounce: "oneshot", springScale: "oneshot", springSlideUp: "oneshot", springSlideDown: "oneshot",
   morphRadius: "oneshot", morphCircle: "oneshot",
-  press: "oneshot",
+  press: "hoverState",
   parallax: "scrollLink", parallaxFast: "scrollLink", parallaxReverse: "scrollLink",
   tiltScroll: "scrollLink", scaleScroll: "scrollLink",
   lift: "hoverState", sink: "hoverState", grow: "hoverState",

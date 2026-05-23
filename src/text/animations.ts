@@ -96,12 +96,13 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
   jitter: {
     out: fadeOut,
     in: [
-      { opacity: 1, transform: "translateX(0)" },
-      { opacity: 1, transform: "translateX(-6px)", offset: 0.2 },
-      { opacity: 1, transform: "translateX(6px)", offset: 0.4 },
-      { opacity: 1, transform: "translateX(-4px)", offset: 0.6 },
-      { opacity: 1, transform: "translateX(4px)", offset: 0.8 },
-      { opacity: 1, transform: "translateX(0)" },
+      { transform: "translateX(0)", opacity: 1 },
+      { transform: "translateX(-2px)", opacity: 1, offset: 0.15 },
+      { transform: "translateX(2px)", opacity: 1, offset: 0.3 },
+      { transform: "translateX(-2px)", opacity: 1, offset: 0.45 },
+      { transform: "translateX(1px)", opacity: 1, offset: 0.6 },
+      { transform: "translateX(-1px)", opacity: 1, offset: 0.75 },
+      { transform: "translateX(0)", opacity: 1 },
     ],
   },
   popUp: {
@@ -285,7 +286,7 @@ export const presets: Record<AnimationPreset, AnimationDefinition> = {
       { transform: 'scale(1)', opacity: 1 },
     ],
   },
-  colorShift: {
+  brightnessShift: {
     out: [
       { filter: 'brightness(1)', opacity: 1 },
       { filter: 'brightness(1.05)', opacity: 1 },

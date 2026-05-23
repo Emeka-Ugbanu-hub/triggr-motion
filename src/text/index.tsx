@@ -228,7 +228,8 @@ function prepareStableTextSwap(el: HTMLElement, oldText: string, newText: string
   el.style.verticalAlign = previous.verticalAlign || "baseline"
   el.style.width = `${width}px`
   el.style.minWidth = `${width}px`
-  if (height > 0) el.style.height = `${height}px`
+  const containerHeight = el.getBoundingClientRect().height
+  el.style.height = `${containerHeight}px`
   el.innerHTML = ""
 
   const oldEl = document.createElement("span")
@@ -3075,9 +3076,10 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       if (!old || !next) return
 
       const el = ref.current
+      const containerWidth = el.getBoundingClientRect().width
       const runId = beginAnimationRun(el)
       const { oldEl, newEl, cleanup } = prepareStableTextSwap(el, old, next, runId)
-      newEl.style.transform = "translateX(100%)"
+      newEl.style.transform = `translateX(${containerWidth}px)`
 
       const line = document.createElement("span")
       line.style.position = "absolute"
@@ -3096,12 +3098,12 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       const lineDuration = motionDuration * 0.65
 
       oldEl.animate(
-        [{ transform: "translateX(0)" }, { transform: "translateX(-100%)" }],
+        [{ transform: "translateX(0)" }, { transform: `translateX(-${containerWidth}px)` }],
         { duration: outDuration, easing: EASE_IN, fill: "forwards" },
       )
 
       const anim = newEl.animate(
-        [{ transform: "translateX(100%)" }, { transform: "translateX(0)" }],
+        [{ transform: `translateX(${containerWidth}px)` }, { transform: "translateX(0)" }],
         { duration: inDuration, easing: SPRING, fill: "forwards" },
       )
 
@@ -3270,6 +3272,8 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
 
       const el = ref.current
       const runId = beginAnimationRun(el)
+      const previousOverflow = el.style.overflow
+      el.style.overflow = "hidden"
       const { oldEl: top, newEl: bottom, cleanup } = prepareStableTextSwap(el, oldText, newText, runId)
       bottom.style.transform = "translateY(100%)"
       top.animate(
@@ -3286,9 +3290,13 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       anim.onfinish = () => {
         animRef.current = null
         cleanup()
+        el.style.overflow = previousOverflow
         onAnimationEnd?.()
       }
-      anim.oncancel = cleanup
+      anim.oncancel = () => {
+        cleanup()
+        el.style.overflow = previousOverflow
+      }
 
       return
     }
@@ -3877,14 +3885,14 @@ const AnimateText = forwardRef<AnimateTextHandle, AnimateTextProps>(function Ani
       anim.onfinish = () => {
         if (!isActiveAnimationRun(hlEl, hlRunId)) return
         animRef.current = null
-        hlEl.style.background = ""
-        hlEl.style.backgroundSize = ""
-        hlEl.style.backgroundRepeat = ""
-        hlEl.style.backgroundPosition = ""
         hlEl.style.willChange = "auto"
         onAnimationEnd?.()
       }
       anim.oncancel = () => {
+        hlEl.style.background = ""
+        hlEl.style.backgroundSize = ""
+        hlEl.style.backgroundRepeat = ""
+        hlEl.style.backgroundPosition = ""
         hlEl.style.willChange = "auto"
       }
       return
