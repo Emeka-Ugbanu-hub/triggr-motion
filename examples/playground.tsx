@@ -3283,7 +3283,7 @@ function DocsSection() {
           </article>
           <article>
             <h4>Subpath imports only</h4>
-            <p>trigr has no root entry. Import from the module you need — each is independent and tree-shakeable. <code>import { Animate } from "trigr"</code> does not exist.</p>
+            <p>triggr-motion has no root entry. Import from the module you need — each is independent and tree-shakeable. <code>import {"{ Animate }"} from "triggr-motion"</code> does not exist.</p>
             <DocCode>{`import { Animate } from "triggr-motion/text"       // Animate.Text
 import { Animate } from "triggr-motion/block"      // Animate.Block, Parallax
 import { Animate } from "triggr-motion/paragraph"  // Animate.Paragraph

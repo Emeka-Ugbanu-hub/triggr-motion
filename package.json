@@ -1,6 +1,6 @@
 {
 "name": "triggr-motion",
-"version": "0.4.0",
+"version": "0.4.1",
   "description": "Content-aware animation library for React. One import per content type. One prop to trigger.",
   "license": "MIT",
   "author": "Emeka Ugbanu",
